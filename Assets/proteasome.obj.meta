@@ -1,0 +1,219 @@
+fileFormatVersion: 2
+guid: a40953bfbe15a7844b0bb733fcb29188
+timeCreated: 1501145464
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: MSMS_main_surface_of_5le5.cif.gz_A_1
+    100002: MSMS_main_surface_of_5le5.cif.gz_a_27
+    100004: MSMS_main_surface_of_5le5.cif.gz_B_2
+    100006: MSMS_main_surface_of_5le5.cif.gz_b_28
+    100008: MSMS_main_surface_of_5le5.cif.gz_C_3
+    100010: MSMS_main_surface_of_5le5.cif.gz_D_4
+    100012: MSMS_main_surface_of_5le5.cif.gz_E_5
+    100014: MSMS_main_surface_of_5le5.cif.gz_F_6
+    100016: MSMS_main_surface_of_5le5.cif.gz_G_7
+    100018: MSMS_main_surface_of_5le5.cif.gz_H_8
+    100020: MSMS_main_surface_of_5le5.cif.gz_I_9
+    100022: MSMS_main_surface_of_5le5.cif.gz_J_10
+    100024: MSMS_main_surface_of_5le5.cif.gz_K_11
+    100026: MSMS_main_surface_of_5le5.cif.gz_L_12
+    100028: MSMS_main_surface_of_5le5.cif.gz_M_13
+    100030: MSMS_main_surface_of_5le5.cif.gz_N_14
+    100032: MSMS_main_surface_of_5le5.cif.gz_O_15
+    100034: MSMS_main_surface_of_5le5.cif.gz_P_16
+    100036: MSMS_main_surface_of_5le5.cif.gz_Q_17
+    100038: MSMS_main_surface_of_5le5.cif.gz_R_18
+    100040: MSMS_main_surface_of_5le5.cif.gz_S_19
+    100042: MSMS_main_surface_of_5le5.cif.gz_T_20
+    100044: MSMS_main_surface_of_5le5.cif.gz_U_21
+    100046: MSMS_main_surface_of_5le5.cif.gz_V_22
+    100048: MSMS_main_surface_of_5le5.cif.gz_W_23
+    100050: MSMS_main_surface_of_5le5.cif.gz_X_24
+    100052: MSMS_main_surface_of_5le5.cif.gz_Y_25
+    100054: MSMS_main_surface_of_5le5.cif.gz_Z_26
+    100056: //RootNode
+    400000: MSMS_main_surface_of_5le5.cif.gz_A_1
+    400002: MSMS_main_surface_of_5le5.cif.gz_a_27
+    400004: MSMS_main_surface_of_5le5.cif.gz_B_2
+    400006: MSMS_main_surface_of_5le5.cif.gz_b_28
+    400008: MSMS_main_surface_of_5le5.cif.gz_C_3
+    400010: MSMS_main_surface_of_5le5.cif.gz_D_4
+    400012: MSMS_main_surface_of_5le5.cif.gz_E_5
+    400014: MSMS_main_surface_of_5le5.cif.gz_F_6
+    400016: MSMS_main_surface_of_5le5.cif.gz_G_7
+    400018: MSMS_main_surface_of_5le5.cif.gz_H_8
+    400020: MSMS_main_surface_of_5le5.cif.gz_I_9
+    400022: MSMS_main_surface_of_5le5.cif.gz_J_10
+    400024: MSMS_main_surface_of_5le5.cif.gz_K_11
+    400026: MSMS_main_surface_of_5le5.cif.gz_L_12
+    400028: MSMS_main_surface_of_5le5.cif.gz_M_13
+    400030: MSMS_main_surface_of_5le5.cif.gz_N_14
+    400032: MSMS_main_surface_of_5le5.cif.gz_O_15
+    400034: MSMS_main_surface_of_5le5.cif.gz_P_16
+    400036: MSMS_main_surface_of_5le5.cif.gz_Q_17
+    400038: MSMS_main_surface_of_5le5.cif.gz_R_18
+    400040: MSMS_main_surface_of_5le5.cif.gz_S_19
+    400042: MSMS_main_surface_of_5le5.cif.gz_T_20
+    400044: MSMS_main_surface_of_5le5.cif.gz_U_21
+    400046: MSMS_main_surface_of_5le5.cif.gz_V_22
+    400048: MSMS_main_surface_of_5le5.cif.gz_W_23
+    400050: MSMS_main_surface_of_5le5.cif.gz_X_24
+    400052: MSMS_main_surface_of_5le5.cif.gz_Y_25
+    400054: MSMS_main_surface_of_5le5.cif.gz_Z_26
+    400056: //RootNode
+    2300000: MSMS_main_surface_of_5le5.cif.gz_A_1
+    2300002: MSMS_main_surface_of_5le5.cif.gz_a_27
+    2300004: MSMS_main_surface_of_5le5.cif.gz_B_2
+    2300006: MSMS_main_surface_of_5le5.cif.gz_b_28
+    2300008: MSMS_main_surface_of_5le5.cif.gz_C_3
+    2300010: MSMS_main_surface_of_5le5.cif.gz_D_4
+    2300012: MSMS_main_surface_of_5le5.cif.gz_E_5
+    2300014: MSMS_main_surface_of_5le5.cif.gz_F_6
+    2300016: MSMS_main_surface_of_5le5.cif.gz_G_7
+    2300018: MSMS_main_surface_of_5le5.cif.gz_H_8
+    2300020: MSMS_main_surface_of_5le5.cif.gz_I_9
+    2300022: MSMS_main_surface_of_5le5.cif.gz_J_10
+    2300024: MSMS_main_surface_of_5le5.cif.gz_K_11
+    2300026: MSMS_main_surface_of_5le5.cif.gz_L_12
+    2300028: MSMS_main_surface_of_5le5.cif.gz_M_13
+    2300030: MSMS_main_surface_of_5le5.cif.gz_N_14
+    2300032: MSMS_main_surface_of_5le5.cif.gz_O_15
+    2300034: MSMS_main_surface_of_5le5.cif.gz_P_16
+    2300036: MSMS_main_surface_of_5le5.cif.gz_Q_17
+    2300038: MSMS_main_surface_of_5le5.cif.gz_R_18
+    2300040: MSMS_main_surface_of_5le5.cif.gz_S_19
+    2300042: MSMS_main_surface_of_5le5.cif.gz_T_20
+    2300044: MSMS_main_surface_of_5le5.cif.gz_U_21
+    2300046: MSMS_main_surface_of_5le5.cif.gz_V_22
+    2300048: MSMS_main_surface_of_5le5.cif.gz_W_23
+    2300050: MSMS_main_surface_of_5le5.cif.gz_X_24
+    2300052: MSMS_main_surface_of_5le5.cif.gz_Y_25
+    2300054: MSMS_main_surface_of_5le5.cif.gz_Z_26
+    3300000: MSMS_main_surface_of_5le5.cif.gz_A_1
+    3300002: MSMS_main_surface_of_5le5.cif.gz_a_27
+    3300004: MSMS_main_surface_of_5le5.cif.gz_B_2
+    3300006: MSMS_main_surface_of_5le5.cif.gz_b_28
+    3300008: MSMS_main_surface_of_5le5.cif.gz_C_3
+    3300010: MSMS_main_surface_of_5le5.cif.gz_D_4
+    3300012: MSMS_main_surface_of_5le5.cif.gz_E_5
+    3300014: MSMS_main_surface_of_5le5.cif.gz_F_6
+    3300016: MSMS_main_surface_of_5le5.cif.gz_G_7
+    3300018: MSMS_main_surface_of_5le5.cif.gz_H_8
+    3300020: MSMS_main_surface_of_5le5.cif.gz_I_9
+    3300022: MSMS_main_surface_of_5le5.cif.gz_J_10
+    3300024: MSMS_main_surface_of_5le5.cif.gz_K_11
+    3300026: MSMS_main_surface_of_5le5.cif.gz_L_12
+    3300028: MSMS_main_surface_of_5le5.cif.gz_M_13
+    3300030: MSMS_main_surface_of_5le5.cif.gz_N_14
+    3300032: MSMS_main_surface_of_5le5.cif.gz_O_15
+    3300034: MSMS_main_surface_of_5le5.cif.gz_P_16
+    3300036: MSMS_main_surface_of_5le5.cif.gz_Q_17
+    3300038: MSMS_main_surface_of_5le5.cif.gz_R_18
+    3300040: MSMS_main_surface_of_5le5.cif.gz_S_19
+    3300042: MSMS_main_surface_of_5le5.cif.gz_T_20
+    3300044: MSMS_main_surface_of_5le5.cif.gz_U_21
+    3300046: MSMS_main_surface_of_5le5.cif.gz_V_22
+    3300048: MSMS_main_surface_of_5le5.cif.gz_W_23
+    3300050: MSMS_main_surface_of_5le5.cif.gz_X_24
+    3300052: MSMS_main_surface_of_5le5.cif.gz_Y_25
+    3300054: MSMS_main_surface_of_5le5.cif.gz_Z_26
+    4300000: MSMS_main_surface_of_5le5.cif.gz_A_1
+    4300002: MSMS_main_surface_of_5le5.cif.gz_a_27
+    4300004: MSMS_main_surface_of_5le5.cif.gz_B_2
+    4300006: MSMS_main_surface_of_5le5.cif.gz_b_28
+    4300008: MSMS_main_surface_of_5le5.cif.gz_C_3
+    4300010: MSMS_main_surface_of_5le5.cif.gz_D_4
+    4300012: MSMS_main_surface_of_5le5.cif.gz_E_5
+    4300014: MSMS_main_surface_of_5le5.cif.gz_F_6
+    4300016: MSMS_main_surface_of_5le5.cif.gz_G_7
+    4300018: MSMS_main_surface_of_5le5.cif.gz_H_8
+    4300020: MSMS_main_surface_of_5le5.cif.gz_I_9
+    4300022: MSMS_main_surface_of_5le5.cif.gz_J_10
+    4300024: MSMS_main_surface_of_5le5.cif.gz_K_11
+    4300026: MSMS_main_surface_of_5le5.cif.gz_L_12
+    4300028: MSMS_main_surface_of_5le5.cif.gz_M_13
+    4300030: MSMS_main_surface_of_5le5.cif.gz_N_14
+    4300032: MSMS_main_surface_of_5le5.cif.gz_O_15
+    4300034: MSMS_main_surface_of_5le5.cif.gz_P_16
+    4300036: MSMS_main_surface_of_5le5.cif.gz_Q_17
+    4300038: MSMS_main_surface_of_5le5.cif.gz_R_18
+    4300040: MSMS_main_surface_of_5le5.cif.gz_S_19
+    4300042: MSMS_main_surface_of_5le5.cif.gz_T_20
+    4300044: MSMS_main_surface_of_5le5.cif.gz_U_21
+    4300046: MSMS_main_surface_of_5le5.cif.gz_V_22
+    4300048: MSMS_main_surface_of_5le5.cif.gz_W_23
+    4300050: MSMS_main_surface_of_5le5.cif.gz_X_24
+    4300052: MSMS_main_surface_of_5le5.cif.gz_Y_25
+    4300054: MSMS_main_surface_of_5le5.cif.gz_Z_26
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
