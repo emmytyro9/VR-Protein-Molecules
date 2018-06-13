@@ -58,11 +58,11 @@ namespace CurvedVRKeyboard
 
                 print("Debug : Inside handleClick(KeyboardStatus)"); //Debugging
                 //sentOutput = GetOutput();
-                if(GetOutput() == "egfr")
+                if(GetOutput() == "2itz" || GetOutput() == "2ITZ")
                 {
-                    print("Debug : Inside if condition(KeyboardStatus)"); //Debugging
+                    print("Debug : Inside if(2itz) condition(KeyboardStatus)"); //Debugging
                     //SceneManager.LoadScene("egfr");
-                    SceneManager.LoadScene("egfr");
+                    SceneManager.LoadScene("2itz");
                 }
                
             }
