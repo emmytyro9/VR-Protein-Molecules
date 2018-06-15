@@ -56,9 +56,10 @@ namespace CurvedVRKeyboard
                             2.2 Or to the spacific coordinate.
                 */
 
-                print("Debug : Inside handleClick(KeyboardStatus)"); //Debugging
+                print("Debug : Inside handleClick(KeyboardStatus) Output: " + GetOutput()); //Debugging
                 //sentOutput = GetOutput();
-                if(GetOutput() == "2itz" || GetOutput() == "2ITZ")
+                sentOutput = GetOutput();
+                if(GetOutput() == "2itz-A" || GetOutput() == "2ITZ-A")
                 {
                     print("Debug : Inside if(2itz) condition(KeyboardStatus)"); //Debugging
                     //SceneManager.LoadScene("egfr");
