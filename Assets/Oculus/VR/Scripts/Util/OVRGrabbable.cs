@@ -139,7 +139,8 @@ public class OVRGrabbable : MonoBehaviour
 
     void Awake()
     {
-        if (m_grabPoints.Length == 0)
+        //Debug.Log(string.Format("Grab Point: " + m_grabPoints.Length));
+        if (m_grabPoints == null)
         {
             // Get the collider from the grabbable
             Collider collider = this.GetComponent<Collider>();
@@ -151,6 +152,11 @@ public class OVRGrabbable : MonoBehaviour
             // Create a default grab point
             m_grabPoints = new Collider[1] { collider };
         }
+    }
+
+    public void setGrabPoint(Collider name)
+    {
+        m_grabPoints = new Collider[1] { name };
     }
 
     protected virtual void Start()

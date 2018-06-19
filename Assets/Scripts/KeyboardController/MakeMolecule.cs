@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Net;
-using UnityEngine.Networking;
 
 public class MakeMolecule : MonoBehaviour
 {
@@ -16,7 +15,7 @@ public class MakeMolecule : MonoBehaviour
     public Material molMat;
     public float softness;
 
-    private string apiUrl = "https://pdbj.org/rest/displayEFSiteFile?format=efvet&id=";
+    //private string apiUrl = "https://pdbj.org/rest/displayEFSiteFile?format=efvet&id=";
 
     private List<Color> vertexColor = new List<Color>(){
         new Color(1.00f, 1.00f, 1.00f, 1.00f),
@@ -50,10 +49,12 @@ public class MakeMolecule : MonoBehaviour
     private List<string> flaggedAminos = new List<string>() { "LEU", "ILE", "VAL", "MET", "PRO", "PHE", "TRP", "TYR", "ALA" };
     private List<string> flaggedAtoms = new List<string>() { "N", "HN", "CA", "C", "O", "OT", "OH", "HH" };
 
-    public bool AcceptAllCertifications(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certification, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
+    /***
+     public bool AcceptAllCertifications(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certification, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
     {
         return true;
     }
+    ***/
 
     public void SpawnMolecule()
     {
@@ -73,23 +74,31 @@ public class MakeMolecule : MonoBehaviour
 
         try
         {
-            ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
+           /***
+           Read local file
+           ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiUrl + name);
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+           HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiUrl + name);
+           HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+
 
             if (response.StatusCode == HttpStatusCode.OK)
-            {
-                Stream dataStream = response.GetResponseStream();
-                StreamReader reader = new StreamReader(dataStream);
+             {
+                 Stream dataStream = response.GetResponseStream();
+
+            ***/
+            string path = "Assets/Resources/" + input.text + ".txt";
+                Debug.Log(string.Format("DEBUG Path: " + path));
+                StreamReader reader = new StreamReader(path);
                 lines = reader.ReadToEnd().Split('\n');
                 reader.Close();
-            }
-            response.Close();
+           // }
+            ///response.Close();
         }
         catch (WebException e)
         {
-            error.text = "WebException Raised : " + e.Status.ToString();
+            error.text = "Exception Raised : " + e.Status.ToString();
         }
 
         return lines;
@@ -152,13 +161,17 @@ public class MakeMolecule : MonoBehaviour
 
             vertices.Add(new Vector3(-1 * x, y, z));
             temperatures.Add(temperatureFactor);
-            if (!flaggedAtoms.Contains(atomName) && flaggedAminos.Contains(residueName))
+
+            
+
+          if (!flaggedAtoms.Contains(atomName) && flaggedAminos.Contains(residueName))
             {
                 colors.Add(vertexColor[colorIndex + 10]);
             }
             else
-            {
+           {
                 colors.Add(vertexColor[colorIndex]);
+                //Debug.Log(string.Format("Color Index: " + colors.Count());/////
             }
 
             if (isInside != 1)
@@ -166,6 +179,9 @@ public class MakeMolecule : MonoBehaviour
                 insiders.Add(i);
             }
         }
+
+        //Debug.Log(string.Format("Vertice Index: " + vertices.Count());///////
+
 
         var triangles = new List<int>();
         for (int i = 0; i < triangleArrayCount; i++)
@@ -176,18 +192,21 @@ public class MakeMolecule : MonoBehaviour
             int b = int.Parse(stArrayData[4]);
             int c = int.Parse(stArrayData[5]);
 
-            if (!insiders.Contains(a - 1) && !insiders.Contains(a - 1) && !insiders.Contains(c - 1))
+            if (!insiders.Contains(a - 1) && !insiders.Contains(b - 1) && !insiders.Contains(c - 1))
             {
                 triangles.Add(c - 1);
                 triangles.Add(b - 1);
                 triangles.Add(a - 1);
             }
         }
+        //Debug.Log(string.Format("triangles Index: " + triangles.Count());//////
 
         Mesh mesh = new Mesh();
         mesh.vertices = vertices.ToArray();
         mesh.triangles = triangles.ToArray();
         mesh.colors = colors.ToArray();
+
+        Debug.Log(string.Format("DEBUG: MESH " + mesh.isReadable));
 
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
@@ -195,6 +214,22 @@ public class MakeMolecule : MonoBehaviour
         mol.GetComponent<MeshFilter>().sharedMesh = mesh;
         mol.GetComponent<SkinnedMeshRenderer>().sharedMesh = mesh;
         mol.GetComponent<SkinnedMeshRenderer>().sharedMaterial = molMat;
+
+        mol.AddComponent<MeshCollider>();
+        MeshCollider molCollider = mol.GetComponent<MeshCollider>();
+        molCollider.convex = false;
+        molCollider.inflateMesh = true;
+        mol.GetComponent<MeshCollider>().sharedMesh = mesh;
+
+        mol.AddComponent<OVRGrabbable>();
+        OVRGrabbable g = mol.GetComponent<OVRGrabbable>();
+        Collider col = mol.GetComponent<MeshCollider>();
+        g.GetComponent<OVRGrabbable>().setGrabPoint(col);
+
+        mol.AddComponent<Rigidbody>();
+        Rigidbody r = mol.GetComponent<Rigidbody>();
+        r.isKinematic = true;
+        r.useGravity = false;
 
         mol.GetComponent<Cloth>().useGravity = false;
         float maxTemparature = temperatures.Max();
