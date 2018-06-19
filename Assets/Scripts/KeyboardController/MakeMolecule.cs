@@ -217,7 +217,7 @@ public class MakeMolecule : MonoBehaviour
 
         mol.AddComponent<MeshCollider>();
         MeshCollider molCollider = mol.GetComponent<MeshCollider>();
-        molCollider.convex = false;
+        molCollider.convex = true;
         molCollider.inflateMesh = true;
         mol.GetComponent<MeshCollider>().sharedMesh = mesh;
 

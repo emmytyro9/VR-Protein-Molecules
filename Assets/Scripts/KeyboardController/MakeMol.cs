@@ -5,19 +5,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Net;
-public class MakeMol : MonoBehaviour {
-    public static Text input;
-    public static Text error;
+using CurvedVRKeyboard;
+public class MakeMol : MonoBehaviour
+{
+    private string input = KeyboardStatus.sentOutput;
+    //private Text error;
 
-    public static float molScale;
-    public static Material molMat;
-    public static float softness;
-    private static float scale = 20;
+    public float molScale;
+    public Material molMat;
+    public float softness;
 
+    //private string apiUrl = "https://pdbj.org/rest/displayEFSiteFile?format=efvet&id=";
 
-    private static string apiUrl = "http://ipr.pdbj.org/rest/displayEFSiteFile?format=efvet&id=2itz-A";
-
-    private static List<Color> vertexColor = new List<Color>(){
+    private List<Color> vertexColor = new List<Color>(){
         new Color(1.00f, 1.00f, 1.00f, 1.00f),
         new Color(1.00f, 0.00f, 0.00f, 1.00f),
         new Color(1.00f, 0.25f, 0.25f, 1.00f),
@@ -46,50 +46,77 @@ public class MakeMol : MonoBehaviour {
         new Color(1.00f, 0.00f, 1.00f, 1.00f)
     };
 
-    private static List<string> flaggedAminos = new List<string>() { "LEU", "ILE", "VAL", "MET", "PRO", "PHE", "TRP", "TYR", "ALA" };
-    private static List<string> flaggedAtoms = new List<string>() { "N", "HN", "CA", "C", "O", "OT", "OH", "HH" };
+    private List<string> flaggedAminos = new List<string>() { "LEU", "ILE", "VAL", "MET", "PRO", "PHE", "TRP", "TYR", "ALA" };
+    private List<string> flaggedAtoms = new List<string>() { "N", "HN", "CA", "C", "O", "OT", "OH", "HH" };
 
-    public static void SpawnMolecule()
+    /***
+     public bool AcceptAllCertifications(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certification, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
     {
-        error.text = "";
-        GameObject mol = readEfvet();
-        if (mol != null)
+        return true;
+    }
+    ***/
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("User"))
         {
-            mol.transform.tag = "Mol";
-            input.text = "";
+            SpawnMolecule();
+            Destroy(this);
         }
     }
 
-    static string[] _getEfvet()
+    public void SpawnMolecule()
+    {
+        //error.text = "";
+        GameObject mol = readEfvet(input, molScale);
+        if (mol != null)
+        {
+            mol.transform.tag = "Mol";
+            input = "";
+            //GameObject.Find ("Main Camera").transform.position = mol.GetComponent<Renderer>().bounds.center - new Vector3(0f, 0f, 0.5f);
+        }
+    }
+
+    string[] _getEfvet(string name)
     {
         string[] lines = new string[] { };
 
         try
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiUrl);
+            /***
+            Read local file
+            ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiUrl + name);
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                Stream dataStream = response.GetResponseStream();
-                StreamReader reader = new StreamReader(dataStream);
-                lines = reader.ReadToEnd().Split('\n');
-                reader.Close();
-            }
-            response.Close();
+
+
+             if (response.StatusCode == HttpStatusCode.OK)
+              {
+                  Stream dataStream = response.GetResponseStream();
+
+             ***/
+            string path = "Assets/Resources/" + input + ".txt";
+            Debug.Log(string.Format("DEBUG Path: " + path));
+            StreamReader reader = new StreamReader(path);
+            lines = reader.ReadToEnd().Split('\n');
+            reader.Close();
+            // }
+            ///response.Close();
         }
         catch (WebException e)
         {
-            error.text = "WebException Raised : " + e.Status.ToString();
+            //error.text = "Exception Raised : " + e.Status.ToString();
         }
 
         return lines;
 
     }
 
-    public static GameObject readEfvet()
+    GameObject readEfvet(string name, float scale)
     {
-        GameObject mol = new GameObject("2itz-A");
+        GameObject mol = new GameObject(name);
         mol.transform.localScale = new Vector3(scale, scale, scale);
 
         mol.AddComponent<MeshFilter>();
@@ -99,7 +126,7 @@ public class MakeMol : MonoBehaviour {
         Regex sepReg = new Regex(@"\s+");
         //		Regex numReg = new Regex(@"[^0-9]");
 
-        string[] lines = _getEfvet();
+        string[] lines = _getEfvet(name);
         if (!lines.Any())
         {
             Destroy(mol);
@@ -116,7 +143,7 @@ public class MakeMol : MonoBehaviour {
 
         if (verticesCount > 65000)
         {
-            error.text = "Very large molecule(" + verticesCount.ToString() + " vertices)";
+            //error.text = "Very large molecule(" + verticesCount.ToString() + " vertices)";
             Destroy(mol);
             mol = null;
             return mol;
@@ -143,6 +170,9 @@ public class MakeMol : MonoBehaviour {
 
             vertices.Add(new Vector3(-1 * x, y, z));
             temperatures.Add(temperatureFactor);
+
+
+
             if (!flaggedAtoms.Contains(atomName) && flaggedAminos.Contains(residueName))
             {
                 colors.Add(vertexColor[colorIndex + 10]);
@@ -150,6 +180,7 @@ public class MakeMol : MonoBehaviour {
             else
             {
                 colors.Add(vertexColor[colorIndex]);
+                //Debug.Log(string.Format("Color Index: " + colors.Count());/////
             }
 
             if (isInside != 1)
@@ -157,6 +188,9 @@ public class MakeMol : MonoBehaviour {
                 insiders.Add(i);
             }
         }
+
+        //Debug.Log(string.Format("Vertice Index: " + vertices.Count());///////
+
 
         var triangles = new List<int>();
         for (int i = 0; i < triangleArrayCount; i++)
@@ -167,18 +201,21 @@ public class MakeMol : MonoBehaviour {
             int b = int.Parse(stArrayData[4]);
             int c = int.Parse(stArrayData[5]);
 
-            if (!insiders.Contains(a - 1) && !insiders.Contains(a - 1) && !insiders.Contains(c - 1))
+            if (!insiders.Contains(a - 1) && !insiders.Contains(b - 1) && !insiders.Contains(c - 1))
             {
                 triangles.Add(c - 1);
                 triangles.Add(b - 1);
                 triangles.Add(a - 1);
             }
         }
+        //Debug.Log(string.Format("triangles Index: " + triangles.Count());//////
 
         Mesh mesh = new Mesh();
         mesh.vertices = vertices.ToArray();
         mesh.triangles = triangles.ToArray();
         mesh.colors = colors.ToArray();
+
+        Debug.Log(string.Format("DEBUG: MESH " + mesh.isReadable));
 
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
@@ -186,6 +223,22 @@ public class MakeMol : MonoBehaviour {
         mol.GetComponent<MeshFilter>().sharedMesh = mesh;
         mol.GetComponent<SkinnedMeshRenderer>().sharedMesh = mesh;
         mol.GetComponent<SkinnedMeshRenderer>().sharedMaterial = molMat;
+
+        mol.AddComponent<MeshCollider>();
+        MeshCollider molCollider = mol.GetComponent<MeshCollider>();
+        molCollider.convex = true;
+        molCollider.inflateMesh = true;
+        mol.GetComponent<MeshCollider>().sharedMesh = mesh;
+
+        mol.AddComponent<OVRGrabbable>();
+        OVRGrabbable g = mol.GetComponent<OVRGrabbable>();
+        Collider col = mol.GetComponent<MeshCollider>();
+        g.GetComponent<OVRGrabbable>().setGrabPoint(col);
+
+        mol.AddComponent<Rigidbody>();
+        Rigidbody r = mol.GetComponent<Rigidbody>();
+        r.isKinematic = true;
+        r.useGravity = false;
 
         mol.GetComponent<Cloth>().useGravity = false;
         float maxTemparature = temperatures.Max();
