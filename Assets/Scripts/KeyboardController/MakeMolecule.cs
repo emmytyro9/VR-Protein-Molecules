@@ -242,6 +242,5 @@ public class MakeMolecule : MonoBehaviour
         mol.GetComponent<Cloth>().coefficients = constrants;
 
         return mol;
-
     }
 }

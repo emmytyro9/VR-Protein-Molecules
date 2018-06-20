@@ -154,21 +154,20 @@ public class OVRGrabbable : MonoBehaviour
         }
     }
 
-    public void setGrabPoint(Collider name)
-    {
-        m_grabPoints = new Collider[1] { name };
-    }
-
     protected virtual void Start()
     {
         m_grabbedKinematic = GetComponent<Rigidbody>().isKinematic;
     }
 
+    public void setGrabPoint(Collider name)
+    {
+        m_grabPoints = new Collider[1] { name };
+    }
+
     void OnDestroy()
     {
-        if (m_grabbedBy != null)
+        if(m_grabbedBy != null)
         {
-            // Notify the hand to release destroyed grabbables
             m_grabbedBy.ForceRelease(this);
         }
     }

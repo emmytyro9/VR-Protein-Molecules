@@ -48,7 +48,7 @@ namespace CurvedVRKeyboard
             }
             else if (value.Equals(SPACE))
             {
-                // TypeKey(BLANKSPACE);
+                // TypeKey(Enter);
                 /* ==>> This is where the events occured after hit enter button.
                         1. Receieve the value of text.
                         2. Make the event occures.
@@ -56,14 +56,11 @@ namespace CurvedVRKeyboard
                             2.2 Or to the spacific coordinate.
                 */
 
-                print("Debug : Inside handleClick(KeyboardStatus) Output: " + GetOutput()); //Debugging
-                //sentOutput = GetOutput();
+                Debug.Log(string.Format("Debug : Inside handleClick(KeyboardStatus) Output: " + GetOutput()));
                 sentOutput = GetOutput();
-                if(GetOutput() == "2itz-A" || GetOutput() == "1tup-EF")
+                if(GetOutput() == "2itz-A" || GetOutput() == "1tup-EF" || GetOutput() == "1atn-A")
                 {
-                    print("Debug : Inside if(2itz) condition(KeyboardStatus)"); //Debugging
-                    //SceneManager.LoadScene("egfr");
-                    //SceneManager.LoadScene("2itz");
+                    Debug.Log(string.Format("Debug : Inside if condition(KeyboardStatus)"));
                     SceneManager.LoadScene("ProteinMoleculeScene");
                 }
                
@@ -73,14 +70,11 @@ namespace CurvedVRKeyboard
                 BackspaceKey();
             }
             else
-            {// Normal letter
+            {
                 TypeKey(value[0]);
             }
         }
 
-        /// <summary>
-        /// Displays special signs
-        /// </summary>
         private void ChangeSpecialLetters()
         {
             KeyLetterEnum ToDisplay = areLettersActive ? KeyLetterEnum.NonLetters : KeyLetterEnum.LowerCase;
@@ -92,9 +86,6 @@ namespace CurvedVRKeyboard
             }
         }
 
-        /// <summary>
-        /// Changes between lower and upper keys
-        /// </summary>
         private void LowerUpperKeys()
         {
             KeyLetterEnum ToDisplay = isLowercase ? KeyLetterEnum.UpperCase : KeyLetterEnum.LowerCase;
@@ -123,7 +114,6 @@ namespace CurvedVRKeyboard
                 textComponent.GetType().GetProperty(TEXT).SetValue(textComponent, output + key.ToString(), null);
                 output = output + key.ToString();
             }
-
         }
 
         public void SetKeys(KeyboardItem[] keys)

@@ -74,7 +74,7 @@ namespace CurvedVRKeyboard
         {
             clicked = true;
             ChangeDisplayedMaterial(keyPressedMaterial);
-            print("Debug: Inside Click(KeyboardItem)"); // Debugging
+            Debug.Log(string.Format("Debug: Inside Click(KeyboardItem)")); // Debugging
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace CurvedVRKeyboard
         /// <returns>value of key</returns>
         public string GetValue()
         {
-            print("Debug: GetValue(KeyboardItem) " + letter.text); //Debugging
+            Debug.Log(string.Format("Debug: GetValue(KeyboardItem) " + letter.text)); //Debugging
             return letter.text;
         }
 
@@ -130,7 +130,7 @@ namespace CurvedVRKeyboard
             if (!letter.text.Equals(value))
             {
                 letter.text = value;
-                print("Debug: SetKeyText(KeyboardItem)"); ///Debugging
+                Debug.Log(string.Format("Debug: SetKeyText(KeyboardItem)")); ///Debugging
             }
         }
 
@@ -193,7 +193,7 @@ namespace CurvedVRKeyboard
         }
 
 
-        /// Changes 'space' bar mesh
+
         /// <param name="creator"></param>
         public void ManipulateSpace(KeyboardCreator creator, Sprite spaceSprite)
         {
@@ -255,7 +255,6 @@ namespace CurvedVRKeyboard
                 position = value;
             }
         }
-
     }
 }
 
