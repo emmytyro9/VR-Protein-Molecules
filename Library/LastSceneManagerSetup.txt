@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/KeyboardScene.unity
+- path: Assets/Scenes/ProteinMoleculeScene.unity
   isLoaded: 1
   isActive: 1
