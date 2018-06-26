@@ -42,6 +42,7 @@ public class OVRGrabber : MonoBehaviour
 
     protected bool inhand = false;
     protected bool enableCheck = false;
+    private bool m_grabbedObject = false;
 
     // Child/attached transforms of the grabber, indicating where to snap held objects to (if you snap them).
     // Also used for ranking grab targets in case of multiple candidates.
@@ -351,23 +352,22 @@ public class OVRGrabber : MonoBehaviour
         m_grabbedObj = null;
     }
 
-    private bool isInHand()
-    {
-        if(m_grabbedObj)
-        {
-            return !inhand;
-        }
-
-        return inhand;
-    }
-
-    private bool isVolumeEnable()
+    private bool IsVolumeEnable()
     {
         if(m_grabVolumeEnabled)
         {
             return !enableCheck;
         }
         return enableCheck;
+    }
+
+    private bool IsInHand()
+    {
+        if(m_grabbedObject)
+        {
+            return !inhand;
+        }
+        return inhand;
     }
 
     void OnDestroy()

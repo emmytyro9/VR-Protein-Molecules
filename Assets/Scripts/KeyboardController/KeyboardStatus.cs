@@ -30,7 +30,6 @@ namespace CurvedVRKeyboard
         private const string TEXT = "text";
         private Component textComponent;
 
-
         /// <summary>
         /// Handles click on keyboarditem
         /// </summary>
@@ -58,10 +57,11 @@ namespace CurvedVRKeyboard
 
                 Debug.Log(string.Format("Debug : Inside handleClick(KeyboardStatus) Output: " + GetOutput()));
                 sentOutput = GetOutput();
-                if(GetOutput() == "2itz-A" || GetOutput() == "1tup-EF" || GetOutput() == "1atn-A")
+                if(GetOutput() == "2itz-A" || GetOutput() == "1tup-EF" || GetOutput() == "1atn-A"|| GetOutput() == "a")
                 {
                     Debug.Log(string.Format("Debug : Inside if condition(KeyboardStatus)"));
-                    SceneManager.LoadScene("ProteinMoleculeScene");
+                    //SceneManager.LoadScene("ProteinMoleculeScene");
+                    SceneManager.LoadScene("Test");
                 }
                
             }

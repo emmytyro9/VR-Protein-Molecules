@@ -5,18 +5,23 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Net;
+using CurvedVRKeyboard;
 
 public class MakeMolecule : MonoBehaviour
 {
-    public Text input;
-    public Text error;
-
+    private string input = KeyboardStatus.sentOutput;
     public float molScale;
     public Material molMat;
     public float softness;
+    /***
+     * if the HttpWebRequest is used, this attribute should be uncomment.
+     * 
+     * private string apiUrl = "https://pdbj.org/rest/displayEFSiteFile?format=efvet&id="; 
+    ***/
 
-    //private string apiUrl = "https://pdbj.org/rest/displayEFSiteFile?format=efvet&id=";
-
+    /// <summary>
+    /// this attribute is the list of colors which are generated for the molecules.
+    /// </summary>
     private List<Color> vertexColor = new List<Color>(){
         new Color(1.00f, 1.00f, 1.00f, 1.00f),
         new Color(1.00f, 0.00f, 0.00f, 1.00f),
@@ -50,21 +55,37 @@ public class MakeMolecule : MonoBehaviour
     private List<string> flaggedAtoms = new List<string>() { "N", "HN", "CA", "C", "O", "OT", "OH", "HH" };
 
     /***
-     public bool AcceptAllCertifications(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certification, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
+     * if the HttpWebRequest is used, this method should be uncomment.
+     * 
+     * public bool AcceptAllCertifications(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certification, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
     {
         return true;
     }
     ***/
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Hand"))
+        {
+            SpawnMolecule();
+            Destroy(this);
+        }
+    }
+
     public void SpawnMolecule()
     {
-        error.text = "";
-        GameObject mol = readEfvet(input.text, molScale);
+        GameObject mol = readEfvet(input, molScale);
         if (mol != null)
         {
             mol.transform.tag = "Mol";
-            input.text = "";
-            //GameObject.Find ("Main Camera").transform.position = mol.GetComponent<Renderer>().bounds.center - new Vector3(0f, 0f, 0.5f);
+            input = "";
+
+            /***
+             * To set position of the camera to the certain coordinate (Nearby the Molecule)
+             * 
+             ***/ 
+             GameObject.FindGameObjectWithTag("Mol").transform.position = GameObject.Find("OVRPlayerController").transform.position - new Vector3(0f, 0f, 0.5f);
+       
         }
     }
 
@@ -74,31 +95,39 @@ public class MakeMolecule : MonoBehaviour
 
         try
         {
-           /***
-           Read local file
-           ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
+            /***
+             * This part is used to create the request and wait for response to get data from website.
+             * 
+            ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
 
-           HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiUrl + name);
-           HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiUrl + name);
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
 
 
-            if (response.StatusCode == HttpStatusCode.OK)
-             {
-                 Stream dataStream = response.GetResponseStream();
+             if (response.StatusCode == HttpStatusCode.OK)
+              {
+                  Stream dataStream = response.GetResponseStream();
 
-            ***/
-            string path = "Assets/Resources/" + input.text + ".txt";
-                Debug.Log(string.Format("DEBUG Path: " + path));
-                StreamReader reader = new StreamReader(path);
-                lines = reader.ReadToEnd().Split('\n');
-                reader.Close();
-           // }
+             ***/
+
+            /***
+             * The attribute 'path' is used to read data from local file in folder Resources.
+             * 'input' value is received from the VR Keyboard.
+             ***/
+            string path = "Assets/Resources/" + input + ".txt";
+            Debug.Log(string.Format("DEBUG Path: " + path));
+            StreamReader reader = new StreamReader(path);
+            lines = reader.ReadToEnd().Split('\n');
+            reader.Close();
+            //If the HttpWebRequest and HttpWebResponse are used, the respond should close after being used.
+            // }
             ///response.Close();
         }
         catch (WebException e)
         {
-            error.text = "Exception Raised : " + e.Status.ToString();
+            Debug.Log(string.Format("Exception Raised : " + e.Status.ToString()));
+            //error.text = "Exception Raised : " + e.Status.ToString();
         }
 
         return lines;
@@ -107,12 +136,16 @@ public class MakeMolecule : MonoBehaviour
 
     GameObject readEfvet(string name, float scale)
     {
+
+
         GameObject mol = new GameObject(name);
         mol.transform.localScale = new Vector3(scale, scale, scale);
 
         mol.AddComponent<MeshFilter>();
         mol.AddComponent<SkinnedMeshRenderer>();
         mol.AddComponent<Cloth>();
+
+
 
         Regex sepReg = new Regex(@"\s+");
         //		Regex numReg = new Regex(@"[^0-9]");
@@ -134,11 +167,16 @@ public class MakeMolecule : MonoBehaviour
 
         if (verticesCount > 65000)
         {
-            error.text = "Very large molecule(" + verticesCount.ToString() + " vertices)";
+            Debug.Log(string.Format("This molecule is too large(more than 65,000 vertices), we are going to destroy it!"));
+            //error.text = "Very large molecule(" + verticesCount.ToString() + " vertices)";
             Destroy(mol);
             mol = null;
             return mol;
         }
+
+        //Implement the spacefill model.
+        //using the coordinate that provided by protein data bank.
+        //Making the interface that user can use to change the model of molecule.
 
         var vertices = new List<Vector3>();
         var colors = new List<Color>();
@@ -162,16 +200,16 @@ public class MakeMolecule : MonoBehaviour
             vertices.Add(new Vector3(-1 * x, y, z));
             temperatures.Add(temperatureFactor);
 
-            
 
-          if (!flaggedAtoms.Contains(atomName) && flaggedAminos.Contains(residueName))
+
+            if (!flaggedAtoms.Contains(atomName) && flaggedAminos.Contains(residueName))
             {
                 colors.Add(vertexColor[colorIndex + 10]);
             }
             else
-           {
+            {
                 colors.Add(vertexColor[colorIndex]);
-                //Debug.Log(string.Format("Color Index: " + colors.Count());/////
+                //Debug.Log(string.Format("Color Index: " + colors.Count());
             }
 
             if (isInside != 1)
@@ -180,7 +218,7 @@ public class MakeMolecule : MonoBehaviour
             }
         }
 
-        //Debug.Log(string.Format("Vertice Index: " + vertices.Count());///////
+        //Debug.Log(string.Format("Vertice Index: " + vertices.Count());
 
 
         var triangles = new List<int>();
@@ -199,7 +237,8 @@ public class MakeMolecule : MonoBehaviour
                 triangles.Add(a - 1);
             }
         }
-        //Debug.Log(string.Format("triangles Index: " + triangles.Count());//////
+
+        //Debug.Log(string.Format("triangles Index: " + triangles.Count());
 
         Mesh mesh = new Mesh();
         mesh.vertices = vertices.ToArray();
