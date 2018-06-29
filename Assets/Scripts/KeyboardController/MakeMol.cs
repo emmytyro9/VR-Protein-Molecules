@@ -98,6 +98,11 @@ public class MakeMol : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Get the data from local file/ HttpWebserver.
+    /// </summary>
+    /// <param name="name">Name of the molecule which can be receive from VR keyboard</param>
+    /// <returns>Array of data that read from file</returns>
     string[] _getEfvet(string name)
     {
         string[] lines = new string[] { };
@@ -148,7 +153,7 @@ public class MakeMol : MonoBehaviour
         if (input.text == "a")
         {
             Molecule = new GameObject();
-            Molecule.name = "Spacefill Mollecule";
+            Molecule.name = "Spacefill Molecule";
             //Molecule.transform.position = new Vector3(-93f, -4.5f, 7.92f);
             Molecule.transform.tag = "Spacefill";
             Molecule.AddComponent<MeshFilter>();
@@ -157,14 +162,14 @@ public class MakeMol : MonoBehaviour
             //		Regex numReg = new Regex(@"[^0-9]");
 
             string[] lines = _getEfvet(name);
-            /*
+            
             if (!lines.Any())
             {
                 Destroy(Molecule);
                 Molecule = null;
                 return Molecule;
             }
-            */
+          
             string line = lines[0].TrimStart(' ');
             string[] stArrayData = sepReg.Split(line);
 

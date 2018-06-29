@@ -154,6 +154,7 @@
     <Compile Include="Assets\Oculus\VR\Editor\OVRPluginUpdaterStub.cs" />
     <Compile Include="Assets\Oculus\VR\Editor\OVRScreenshotWizard.cs" />
     <Compile Include="Assets\Oculus\VR\Scripts\Editor\OVRManagerEditor.cs" />
+    <Compile Include="Assets\OVRInspector\Scripts\UIUtils\Editor\UIWidgetMenuItems.cs" />
     <Compile Include="Assets\Scripts\KeyboardController\Editor\KeyboardCreatorEditor.cs" />
     <Compile Include="Assets\Scripts\KeyboardController\Editor\KeyboardStatusEditor.cs" />
   </ItemGroup>
@@ -161,6 +162,13 @@
     <None Include="Assets\Handcrafted Mobile\CurvedVRKeyboard\Documentation\CHANGE_LOG.txt" />
     <None Include="Assets\Handcrafted Mobile\CurvedVRKeyboard\Documentation\README.txt" />
     <None Include="Assets\Materials\VertexColor.shader" />
+    <None Include="Assets\OVRInspector\Resources\OVRSettings.txt" />
+    <None Include="Assets\OVRInspector\Resources\Quit.txt" />
+    <None Include="Assets\OVRInspector\Resources\UISettings.txt" />
+    <None Include="Assets\OVRInspector\Shaders\Particle Alpha Blend-AfterTrans-TransAlphaCutoff.shader" />
+    <None Include="Assets\OVRInspector\Shaders\Particle-Alpha-Premultiply-AfterTrans.shader" />
+    <None Include="Assets\OVRInspector\Shaders\UI-OptionalZTest.shader" />
+    <None Include="Assets\OVRInspector\Shaders\UI-OptionalZTestFont.shader" />
     <None Include="Assets\Oculus\Avatar\Content\Materials\AvatarMaterialStateShader.cginc" />
     <None Include="Assets\Oculus\Avatar\Content\Materials\AvatarSurfaceShader.shader" />
     <None Include="Assets\Oculus\Avatar\Content\Materials\AvatarSurfaceShaderPBS.shader" />
@@ -185,6 +193,7 @@
     <None Include="Assets\Resources\1atn-A.txt" />
     <None Include="Assets\Resources\1tup-EF.txt" />
     <None Include="Assets\Resources\2itz-A.txt" />
+    <None Include="Assets\Resources\a.txt" />
     <None Include="Assets\SkySerie Freebie\Hdri setup.txt" />
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
     <None Include="Assets\Standard Assets\Environment\Water (Basic)\Shaders\FXWaterBasic.shader" />

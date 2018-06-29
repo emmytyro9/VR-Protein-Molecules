@@ -296,10 +296,6 @@ public class OVRPlayerController : MonoBehaviour
 			MoveThrottle += (actualXZ - predictedXZ) / (SimulationRate * Time.deltaTime);
 	}
 
-
-
-
-
 	public virtual void UpdateMovement()
 	{
 		if (HaltUpdateMovement)
