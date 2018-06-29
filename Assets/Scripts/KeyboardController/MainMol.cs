@@ -57,20 +57,14 @@ public class MainMol : MonoBehaviour
         GameObject mol = readEfvet(input, molScale, type);
         if (mol != null)
         {
-            
-            //input = "";
-            GameObject.FindGameObjectWithTag("Mol").transform.position = GameObject.Find("OVRPlayerController").transform.position - new Vector3(0f, 0f, -3f);
+            mol.transform.tag = "Mol";
+            mol.GetComponent<Transform>().transform.position = GameObject.Find("OVRPlayerController").transform.position - new Vector3(0f, 0f, -3f);
             Debug.Log(string.Format("Mol x,y,z: ") + GameObject.FindGameObjectWithTag("Mol").transform.position.x + ", " + GameObject.FindGameObjectWithTag("Mol").transform.position.y + ", " + GameObject.FindGameObjectWithTag("Mol").transform.position.z);
             Debug.Log(string.Format("OVRPlayerController x,y,z: ") + GameObject.Find("OVRPlayerController").transform.position.x + ", " + GameObject.Find("OVRPlayerController").transform.position.y + ", " + GameObject.Find("OVRPlayerController").transform.position.z);
+
         }
     }
-    /*
-    private
-    private static float FindPosition(string pos)
-    {
 
-    }
-*/
     public static string[] _getEfvet(string name)
     {
         string[] lines = new string[] { };
@@ -143,8 +137,6 @@ public class MainMol : MonoBehaviour
                 float x = float.Parse(stArrayData[18]);
                 float y = float.Parse(stArrayData[19]);
                 float z = float.Parse(stArrayData[20]);
-                //float temperatureFactor = float.Parse(stArrayData[8]);
-                //int isInside = int.Parse(stArrayData[11]);
 
                 vertices.Add(new Vector3(-1 * x, y, z));
                 GameObject ins = Instantiate(atomModel, new Vector3(-1 * x, y, z), Quaternion.identity);
@@ -196,6 +188,7 @@ public class MainMol : MonoBehaviour
             r.isKinematic = true;
             r.useGravity = false;
 
+            Debug.Log(string.Format("Position in readvet(Spacefill): " + Molecule.transform.position.x + "," + Molecule.transform.position.y + ", " + Molecule.transform.position.z));
 
             return Molecule;
         }
@@ -330,7 +323,7 @@ public class MainMol : MonoBehaviour
                 constrants[i].maxDistance = softness * temperatures[i] / maxTemparature;
             }
             mol.GetComponent<Cloth>().coefficients = constrants;
-
+            Debug.Log(string.Format("Position in readvet(Surface): " + mol.transform.position.x + "," + mol.transform.position.y + ", " + mol.transform.position.z));
             return mol;
         }
      return null;
