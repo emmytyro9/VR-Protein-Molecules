@@ -8,7 +8,9 @@ TagManager:
   - User
   - Hand
   - Spacefill
-  - TestObject
+  - dontmove
+  - listlast
+  - Surface
   layers:
   - Default
   - TransparentFX

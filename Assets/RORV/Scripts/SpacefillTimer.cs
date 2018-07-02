@@ -4,67 +4,69 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using UnityEngine.UI;
 
-public class SpacefillTimer : MonoBehaviour
-{
-    public static bool isClick = false;
-    public int timeremain = 3;
-    Button _button;
-    private MainMol mol;
-
-    // Use this for initialization
-    void Start()
+    public class SpacefillTimer : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
+        public static bool isClick = false;
+        public int timeremain = 3;
+        Button _button;
+        private MainMol mol;
 
-        _button = GetComponent<Button>();
-
-    }
-
-    void Update()
-    {
-
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        NotificationCenter.DefaultCenter().PostNotification(this, "EnBoton");
-        InvokeRepeating("countDown", 1, 1);
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        NotificationCenter.DefaultCenter().PostNotification(this, "EnNada");
-        Debug.Log(string.Format("Debug: Cancel."));
-        CancelInvoke("countDown");
-        timeremain = 3;
-        isClick = false;
-    }
-
-    void countDown()
-    {
-        if (timeremain <= 0)
+        // Use this for initialization
+        void Start()
         {
-            NotificationCenter.DefaultCenter().PostNotification(this, "EnNada");
-            _button.onClick.Invoke();
-            CancelInvoke("countDown");
-            timeremain = 3;
+
+            _button = GetComponent<Button>();
 
         }
 
-        timeremain--;
-    }
+        void Update()
+        {
 
-    public void Clicked()
-    {
-        isClick = true;
-        Debug.Log(string.Format("Debug: Clicked."));
-        Destroy(GameObject.FindGameObjectWithTag("Mol"));
-        MainMol.SpawnMolecule("spacefill");
+        }
 
-    }
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            NotificationCenter.DefaultCenter().PostNotification(this, "EnBoton");
+            InvokeRepeating("countDown", 1, 1);
+        }
 
-    public bool getIsClick()
-    {
-        return isClick;
-    }
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            NotificationCenter.DefaultCenter().PostNotification(this, "EnNada");
+            Debug.Log(string.Format("Debug: Cancel."));
+            CancelInvoke("countDown");
+            timeremain = 3;
+            //isClick = false;
+        }
+
+        void countDown()
+        {
+            if (timeremain <= 0)
+            {
+                NotificationCenter.DefaultCenter().PostNotification(this, "EnNada");
+                _button.onClick.Invoke();
+                CancelInvoke("countDown");
+                timeremain = 3;
+
+            }
+
+            timeremain--;
+        }
+
+        public void Clicked()
+        {
+            Debug.Log(string.Format("Spacefill is clicked."));
+          
+            isClick = true;
+            Debug.Log(string.Format("Debug: Clicked."));
+            Destroy(GameObject.FindGameObjectWithTag("Mol"));
+            MainMol.SpawnMolecule("spacefill");
+           
+        }
+
+        public bool getIsClick()
+        {
+            return isClick;
+        }
 }
 

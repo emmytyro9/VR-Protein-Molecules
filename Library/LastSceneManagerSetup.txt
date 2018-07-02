@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/TestRaycast.unity
+- path: Assets/Scenes/KeyboardScene.unity
   isLoaded: 1
   isActive: 1

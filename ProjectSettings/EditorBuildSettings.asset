@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Test.unity
     guid: 75767ced88a452c4baac738cf389ec97
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestRaycast.unity
     guid: a02dd4625d67946429eeb0a2efc9c46f
+  - enabled: 1
+    path: Assets/Scenes/NewRaycast.unity
+    guid: 216702529e3594d4c805bc3ccef2d5c7

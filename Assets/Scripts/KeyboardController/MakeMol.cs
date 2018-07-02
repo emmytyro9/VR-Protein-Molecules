@@ -6,33 +6,24 @@
 
 using UnityEngine;
 using System.Linq;
-using UnityEngine.UI;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Net;
 using CurvedVRKeyboard;
-using System.Collections;
+
 
 public class MakeMol : MonoBehaviour
 {
-    public Text input;
-    public float molScale;
-    public Material molMat;
-    public float softness;
-    public GameObject atomModel;
-    private GameObject Molecule;
-    private List<Vector3> vertice = new List<Vector3>();
-    /***
-     * if the HttpWebRequest is used, this attribute should be uncomment.
-     * 
-     * private string apiUrl = "https://pdbj.org/rest/displayEFSiteFile?format=efvet&id="; 
-    ***/
+    private static string input = KeyboardStatus.sentOutput;
+    private static float molScale = 0.01f;
+    private static Material molMat;
+    private static float softness = 1f;
+    private static GameObject atomModel;
+    private static GameObject Molecule;
+    private static List<Vector3> vertice = new List<Vector3>();
 
-    /// <summary>
-    /// this attribute is the list of colors which are generated for the molecules.
-    /// </summary>
-    private List<Color> vertexColor = new List<Color>(){
+    private static List<Color> vertexColor = new List<Color>(){
         new Color(1.00f, 1.00f, 1.00f, 1.00f),
         new Color(1.00f, 0.00f, 0.00f, 1.00f),
         new Color(1.00f, 0.25f, 0.25f, 1.00f),
@@ -61,133 +52,85 @@ public class MakeMol : MonoBehaviour
         new Color(1.00f, 0.00f, 1.00f, 1.00f)
     };
 
-    private List<string> flaggedAminos = new List<string>() { "LEU", "ILE", "VAL", "MET", "PRO", "PHE", "TRP", "TYR", "ALA" };
-    private List<string> flaggedAtoms = new List<string>() { "N", "HN", "CA", "C", "O", "OT", "OH", "HH" };
+    private static List<string> flaggedAminos = new List<string>() { "LEU", "ILE", "VAL", "MET", "PRO", "PHE", "TRP", "TYR", "ALA" };
+    private static List<string> flaggedAtoms = new List<string>() { "N", "HN", "CA", "C", "O", "OT", "OH", "HH" };
+    private static string keepInput;
 
-    /***
-     * if the HttpWebRequest is used, this method should be uncomment.
-     * 
-     * public bool AcceptAllCertifications(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certification, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
+    public static void SpawnMolecule(string type)
     {
-        return true;
-    }
-    ***/
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Hand"))
-        {
-            SpawnMolecule();
-            Destroy(this);
-        }
-    }
-
-    public void SpawnMolecule()
-    {
-        GameObject mol = readEfvet(input.text, molScale);
+        GameObject mol = readEfvet(input, molScale, type);
         if (mol != null)
         {
             mol.transform.tag = "Mol";
-            input.text = "";
+            mol.GetComponent<Transform>().transform.position = GameObject.Find("OVRPlayerController").transform.position - new Vector3(0f, 0f, -3f);
+            Debug.Log(string.Format("Mol x,y,z: ") + GameObject.FindGameObjectWithTag("Mol").transform.position.x + ", " + GameObject.FindGameObjectWithTag("Mol").transform.position.y + ", " + GameObject.FindGameObjectWithTag("Mol").transform.position.z);
+            Debug.Log(string.Format("OVRPlayerController x,y,z: ") + GameObject.Find("OVRPlayerController").transform.position.x + ", " + GameObject.Find("OVRPlayerController").transform.position.y + ", " + GameObject.Find("OVRPlayerController").transform.position.z);
 
-            /***
-             * To set position of the camera to the certain coordinate (Nearby the Molecule)
-             *  ***/
-            GameObject.FindGameObjectWithTag("Mol").transform.position = GameObject.Find("OVRPlayerController").transform.position - new Vector3(0f, 0f, -3f);
-           
         }
     }
 
-    /// <summary>
-    /// Get the data from local file/ HttpWebserver.
-    /// </summary>
-    /// <param name="name">Name of the molecule which can be receive from VR keyboard</param>
-    /// <returns>Array of data that read from file</returns>
-    string[] _getEfvet(string name)
+    public static string[] _getEfvet(string name)
     {
         string[] lines = new string[] { };
-
         try
         {
-            /***
-             * This part is used to create the request and wait for response to get data from website.
-             * 
-            ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiUrl + name);
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-
-
-             if (response.StatusCode == HttpStatusCode.OK)
-              {
-                  Stream dataStream = response.GetResponseStream();
-
-             ***/
-
-            /***
-             * The attribute 'path' is used to read data from local file in folder Resources.
-             * 'input' value is received from the VR Keyboard.
-             ***/
-            string path = "Assets/Resources/" + input.text + ".txt";
+            string path = "Assets/Resources/" + input + ".txt";
             Debug.Log(string.Format("DEBUG Path: " + path));
             StreamReader reader = new StreamReader(path);
             lines = reader.ReadToEnd().Split('\n');
             reader.Close();
-            //If the HttpWebRequest and HttpWebResponse are used, the respond should close after being used.
-            // }
-            ///response.Close();
         }
         catch (WebException e)
         {
             Debug.Log(string.Format("Exception Raised : " + e.Status.ToString()));
-            //error.text = "Exception Raised : " + e.Status.ToString();
         }
 
         return lines;
-
     }
 
-    GameObject readEfvet(string name, float scale)
+    public static GameObject readEfvet(string name, float scale, string type)
     {
-        if (input.text == "a")
+        Debug.Log(string.Format("Debug: Type = ") + type);
+        Material newMat = Resources.Load("AAA", typeof(Material)) as Material;
+        molMat = newMat;
+        atomModel = GameObject.Find("AtomModel");
+
+        if (type == "spacefill")
         {
             Molecule = new GameObject();
             Molecule.name = "Spacefill Molecule";
-            //Molecule.transform.position = new Vector3(-93f, -4.5f, 7.92f);
-            Molecule.transform.tag = "Spacefill";
             Molecule.AddComponent<MeshFilter>();
 
             Regex sepReg = new Regex(@"\s+");
             //		Regex numReg = new Regex(@"[^0-9]");
 
             string[] lines = _getEfvet(name);
-            
+
             if (!lines.Any())
             {
                 Destroy(Molecule);
                 Molecule = null;
                 return Molecule;
             }
-          
+
             string line = lines[0].TrimStart(' ');
             string[] stArrayData = sepReg.Split(line);
 
             int verticesCount = int.Parse(stArrayData[0]);
             int edgesCount = int.Parse(stArrayData[1]);
             int triangleArrayCount = int.Parse(stArrayData[2]);
-           
+
             if (verticesCount > 65000)
             {
                 Debug.Log(string.Format("This molecule is too large(more than 65,000 vertices), we are going to destroy it!"));
-                //error.text = "Very large molecule(" + verticesCount.ToString() + " vertices)";
                 Destroy(Molecule);
                 Molecule = null;
                 return Molecule;
             }
-  
+
             var vertices = new List<Vector3>();
-           
+
             var insiders = new List<int>();
 
             for (int i = 0; i < verticesCount; i++)
@@ -198,16 +141,12 @@ public class MakeMol : MonoBehaviour
                 float x = float.Parse(stArrayData[18]);
                 float y = float.Parse(stArrayData[19]);
                 float z = float.Parse(stArrayData[20]);
-                float temperatureFactor = float.Parse(stArrayData[8]);
-                int isInside = int.Parse(stArrayData[11]);
 
                 vertices.Add(new Vector3(-1 * x, y, z));
+                //Generate each sphere for the protein molecule.
                 GameObject ins = Instantiate(atomModel, new Vector3(-1 * x, y, z), Quaternion.identity);
                 ins.transform.SetParent(Molecule.transform);
             }
-
-            //Debug.Log(string.Format("Vertice Index: " + vertices.Count());
-
 
             var triangles = new List<int>();
             for (int i = 0; i < triangleArrayCount; i++)
@@ -218,41 +157,25 @@ public class MakeMol : MonoBehaviour
                 int b = int.Parse(stArrayData[4]);
                 int c = int.Parse(stArrayData[5]);
 
-
                 if (!insiders.Contains(a - 1) && !insiders.Contains(b - 1) && !insiders.Contains(c - 1))
                 {
                     triangles.Add(c - 1);
                     triangles.Add(b - 1);
                     triangles.Add(a - 1);
                 }
-                //Debug.Log(string.Format("c: " + c + "| b: " + b + "| a: " + a));
-                /***
-                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                cube.transform.position = new Vector3(c - 1, b - 1, a - 1);
-                ***/
             }
 
-            //Debug.Log(string.Format("triangles Index: " + triangles.Count());
-
-
-            //Start The Coroutine
-            //StartCoroutine("InstantiateDelay", 1000);
             Molecule.transform.localScale = new Vector3(.01f, .01f, .01f);
 
             Mesh mesh = new Mesh();
             mesh.vertices = vertices.ToArray();
             mesh.triangles = triangles.ToArray();
-            Debug.Log(string.Format("Triangle: " + mesh.triangles.Count()));
-            //mesh.colors = colors.ToArray();
-
-            //Debug.Log(string.Format("DEBUG: MESH " + mesh.isReadable));
+            //Debug.Log(string.Format("Triangle: " + mesh.triangles.Count()));
 
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
 
             Molecule.GetComponent<MeshFilter>().sharedMesh = mesh;
-            //Molecule.GetComponent<SkinnedMeshRenderer>().sharedMesh = mesh;
 
             Molecule.AddComponent<MeshCollider>();
             MeshCollider molCollider = Molecule.GetComponent<MeshCollider>();
@@ -269,13 +192,14 @@ public class MakeMol : MonoBehaviour
             Rigidbody r = Molecule.GetComponent<Rigidbody>();
             r.isKinematic = true;
             r.useGravity = false;
-            
+
+            //Debug.Log(string.Format("Position in readvet(Spacefill): " + Molecule.transform.position.x + "," + Molecule.transform.position.y + ", " + Molecule.transform.position.z));
 
             return Molecule;
         }
-        
+
         //***********************************************************************************
-        else  
+        else if (type == "surface")
         {
 
             GameObject mol = new GameObject(name);
@@ -306,7 +230,6 @@ public class MakeMol : MonoBehaviour
             if (verticesCount > 65000)
             {
                 Debug.Log(string.Format("This molecule is too large(more than 65,000 vertices), we are going to destroy it!"));
-                //error.text = "Very large molecule(" + verticesCount.ToString() + " vertices)";
                 Destroy(mol);
                 mol = null;
                 return mol;
@@ -341,7 +264,6 @@ public class MakeMol : MonoBehaviour
                 else
                 {
                     colors.Add(vertexColor[colorIndex]);
-                    //Debug.Log(string.Format("Color Index: " + colors.Count());
                 }
 
                 if (isInside != 1)
@@ -349,9 +271,6 @@ public class MakeMol : MonoBehaviour
                     insiders.Add(i);
                 }
             }
-
-            //Debug.Log(string.Format("Vertice Index: " + vertices.Count());
-
 
             var triangles = new List<int>();
             for (int i = 0; i < triangleArrayCount; i++)
@@ -368,10 +287,7 @@ public class MakeMol : MonoBehaviour
                     triangles.Add(b - 1);
                     triangles.Add(a - 1);
                 }
-                //Debug.Log(string.Format("c: " + c + "| b: " + b + "| a: " + a));
             }
-
-            //Debug.Log(string.Format("triangles Index: " + triangles.Count());
 
             Mesh mesh = new Mesh();
             mesh.vertices = vertices.ToArray();
@@ -412,31 +328,10 @@ public class MakeMol : MonoBehaviour
                 constrants[i].maxDistance = softness * temperatures[i] / maxTemparature;
             }
             mol.GetComponent<Cloth>().coefficients = constrants;
+            //Debug.Log(string.Format("Position in readvet(Surface): " + mol.transform.position.x + "," + mol.transform.position.y + ", " + mol.transform.position.z));
 
             return mol;
         }
+        return null;
     }
-    /*
-    IEnumerator InstantiateDelay(int perframeCreateNum)
-    {
-        int count = 0;
-
-        for (int i = 0; i < vertice.Count(); i++)
-        {
-            GameObject ins = Instantiate(atomModel, vertice[i], Quaternion.identity);
-            ins.transform.SetParent(Molecule.transform);
-            //Debug.Log(string.Format("Sphere scale: " + ins.transform.localScale.x + ", " + ins.transform.localScale.y + ", " + ins.transform.localScale.z));
-            if (count < perframeCreateNum)
-            {
-                count++;
-            }
-            else
-            {
-                count = 0;
-                yield return 0;
-            }
-        }
-        yield return 0;
-        Molecule.transform.localScale = new Vector3(.01f, .01f, .01f);
-    }*/
 }

@@ -62,7 +62,8 @@ namespace CurvedVRKeyboard
                     Debug.Log(string.Format("Debug : Inside if condition(KeyboardStatus)"));
                     //SceneManager.LoadScene("ProteinMoleculeScene");
                     //SceneManager.LoadScene("Test");
-                    SceneManager.LoadScene("TestRaycast");
+                    //SceneManager.LoadScene("NewRaycast");
+                    SceneManager.LoadScene("NewRaycast");
                 }
                
             }

@@ -1,13 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Net;
 using CurvedVRKeyboard;
-using System.Collections;
-using ButtonTimers;
 
 public class MainMol : MonoBehaviour
 {
@@ -57,6 +54,7 @@ public class MainMol : MonoBehaviour
         GameObject mol = readEfvet(input, molScale, type);
         if (mol != null)
         {
+            type = "";
             mol.transform.tag = "Mol";
             mol.GetComponent<Transform>().transform.position = GameObject.Find("OVRPlayerController").transform.position - new Vector3(0f, 0f, -3f);
             Debug.Log(string.Format("Mol x,y,z: ") + GameObject.FindGameObjectWithTag("Mol").transform.position.x + ", " + GameObject.FindGameObjectWithTag("Mol").transform.position.y + ", " + GameObject.FindGameObjectWithTag("Mol").transform.position.z);
@@ -139,6 +137,7 @@ public class MainMol : MonoBehaviour
                 float z = float.Parse(stArrayData[20]);
 
                 vertices.Add(new Vector3(-1 * x, y, z));
+                //Generate each sphere for the protein molecule.
                 GameObject ins = Instantiate(atomModel, new Vector3(-1 * x, y, z), Quaternion.identity);
                 ins.transform.SetParent(Molecule.transform);
             }
@@ -165,7 +164,7 @@ public class MainMol : MonoBehaviour
             Mesh mesh = new Mesh();
             mesh.vertices = vertices.ToArray();
             mesh.triangles = triangles.ToArray();
-            Debug.Log(string.Format("Triangle: " + mesh.triangles.Count()));
+            //Debug.Log(string.Format("Triangle: " + mesh.triangles.Count()));
 
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
@@ -188,7 +187,7 @@ public class MainMol : MonoBehaviour
             r.isKinematic = true;
             r.useGravity = false;
 
-            Debug.Log(string.Format("Position in readvet(Spacefill): " + Molecule.transform.position.x + "," + Molecule.transform.position.y + ", " + Molecule.transform.position.z));
+            //Debug.Log(string.Format("Position in readvet(Spacefill): " + Molecule.transform.position.x + "," + Molecule.transform.position.y + ", " + Molecule.transform.position.z));
 
             return Molecule;
         }
@@ -323,7 +322,8 @@ public class MainMol : MonoBehaviour
                 constrants[i].maxDistance = softness * temperatures[i] / maxTemparature;
             }
             mol.GetComponent<Cloth>().coefficients = constrants;
-            Debug.Log(string.Format("Position in readvet(Surface): " + mol.transform.position.x + "," + mol.transform.position.y + ", " + mol.transform.position.z));
+            //Debug.Log(string.Format("Position in readvet(Surface): " + mol.transform.position.x + "," + mol.transform.position.y + ", " + mol.transform.position.z));
+
             return mol;
         }
      return null;
