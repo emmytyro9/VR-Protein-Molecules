@@ -36,7 +36,7 @@ using UnityEngine.UI;
             Debug.Log(string.Format("Debug: Cancel."));
             CancelInvoke("countDown");
             timeremain = 3;
-            //isClick = false;
+            isClick = false;
         }
 
         void countDown()

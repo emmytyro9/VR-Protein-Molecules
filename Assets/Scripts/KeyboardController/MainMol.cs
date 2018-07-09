@@ -12,7 +12,6 @@ public class MainMol : MonoBehaviour
     private static float molScale = 0.01f;
     private static Material molMat;
     private static float softness = 1f;
-    private static GameObject atomModel;
     private static GameObject Molecule;
     private static List<Vector3> vertice = new List<Vector3>();
 
@@ -88,7 +87,10 @@ public class MainMol : MonoBehaviour
         Debug.Log(string.Format("Debug: Type = ") + type);
         Material newMat = Resources.Load("AAA", typeof(Material)) as Material;
         molMat = newMat;
-        atomModel = GameObject.Find("AtomModel");
+        GameObject atomModel_14 = GameObject.Find("AtomModel_14");
+        GameObject atomModel_15 = GameObject.Find("AtomModel_15");
+        GameObject atomModel_185 = GameObject.Find("AtomModel_185");
+        GameObject atomModel_2 = GameObject.Find("AtomModel_2");
 
         if (type == "spacefill")
         {
@@ -124,8 +126,8 @@ public class MainMol : MonoBehaviour
             }
 
             var vertices = new List<Vector3>();
-
             var insiders = new List<int>();
+            var insCollection = new List<GameObject>();
 
             for (int i = 0; i < verticesCount; i++)
             {
@@ -135,12 +137,53 @@ public class MainMol : MonoBehaviour
                 float x = float.Parse(stArrayData[18]);
                 float y = float.Parse(stArrayData[19]);
                 float z = float.Parse(stArrayData[20]);
+                string atomName = stArrayData[14];
+                string residueName = stArrayData[15];
 
                 vertices.Add(new Vector3(-1 * x, y, z));
-                //Generate each sphere for the protein molecule.
-                GameObject ins = Instantiate(atomModel, new Vector3(-1 * x, y, z), Quaternion.identity);
-                ins.transform.SetParent(Molecule.transform);
+                //Assign radius to each atom.
+                float atomSize = CheckSizeOfElenemts(atomName, residueName);
+                GameObject instantiateObj = null;
+                Renderer rend = null;
+                Color atomColor = GetColor(atomName);
+                //Debug.Log(string.Format("DEBUG: Atom size: ") + atomSize);
+                if (atomName != "OXT")
+                {
+                    if (atomSize == 1.4f)
+                    {
+                        instantiateObj = Instantiate(atomModel_14, new Vector3(-1 * x, y, z), Quaternion.identity);
+                        rend = instantiateObj.GetComponent<Renderer>();
+                        rend.material.color = atomColor;
+                    }
+                    else if (atomSize == 1.5f)
+                    {
+                        instantiateObj = Instantiate(atomModel_15, new Vector3(-1 * x, y, z), Quaternion.identity);
+                        rend = instantiateObj.GetComponent<Renderer>();
+                        rend.material.color = atomColor;
+                    }
+                    else if (atomSize == 1.85f)
+                    {
+                        instantiateObj = Instantiate(atomModel_185, new Vector3(-1 * x, y, z), Quaternion.identity);
+                        rend = instantiateObj.GetComponent<Renderer>();
+                        rend.material.color = atomColor;
+                    }
+                    else if (atomSize == 2f)
+                    {
+                        instantiateObj = Instantiate(atomModel_2, new Vector3(-1 * x, y, z), Quaternion.identity);
+                        rend = instantiateObj.GetComponent<Renderer>();
+                        rend.material.color = atomColor;
+                    }
+
+
+                    //Debug.Log(string.Format("DEBUG: Color = " + atomColor + " || Atom Name = " + atomName));
+                    instantiateObj.transform.SetParent(Molecule.transform);
+                    instantiateObj.isStatic = true;
+                    insCollection.Add(instantiateObj);
+                }
             }
+
+            Molecule.transform.localScale = new Vector3(.01f, .01f, .01f);
+            StaticBatchingUtility.Combine(insCollection.ToArray(), Molecule);
 
             var triangles = new List<int>();
             for (int i = 0; i < triangleArrayCount; i++)
@@ -159,8 +202,6 @@ public class MainMol : MonoBehaviour
                 }
             }
 
-            Molecule.transform.localScale = new Vector3(.01f, .01f, .01f);
-
             Mesh mesh = new Mesh();
             mesh.vertices = vertices.ToArray();
             mesh.triangles = triangles.ToArray();
@@ -170,6 +211,23 @@ public class MainMol : MonoBehaviour
             mesh.RecalculateBounds();
 
             Molecule.GetComponent<MeshFilter>().sharedMesh = mesh;
+
+            /***
+             * Conbine MeshFilter
+            MeshFilter[] meshFilters = Molecule.GetComponentsInChildren<MeshFilter>();
+            CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+            int j = 0;
+            while (j < meshFilters.Length)
+            {
+                combine[j].mesh = meshFilters[j].sharedMesh;
+                combine[j].transform = meshFilters[j].transform.localToWorldMatrix;
+                meshFilters[j].gameObject.SetActive(false);
+                j++;
+            }
+            Molecule.transform.GetComponent<MeshFilter>().mesh = mesh;
+            Molecule.transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
+            Molecule.transform.gameObject.SetActive(true);
+            ***/
 
             Molecule.AddComponent<MeshCollider>();
             MeshCollider molCollider = Molecule.GetComponent<MeshCollider>();
@@ -204,7 +262,6 @@ public class MainMol : MonoBehaviour
             mol.AddComponent<Cloth>();
 
             Regex sepReg = new Regex(@"\s+");
-            //		Regex numReg = new Regex(@"[^0-9]");
 
             string[] lines = _getEfvet(name);
             if (!lines.Any())
@@ -299,7 +356,6 @@ public class MainMol : MonoBehaviour
 
             mol.AddComponent<MeshCollider>();
             MeshCollider molCollider = mol.GetComponent<MeshCollider>();
-            molCollider.convex = true;
             molCollider.inflateMesh = true;
             mol.GetComponent<MeshCollider>().sharedMesh = mesh;
 
@@ -327,5 +383,269 @@ public class MainMol : MonoBehaviour
             return mol;
         }
      return null;
+    }
+
+    private static Color GetColor(string atom)
+    {
+        if(atom[0] == 'C')
+        {
+            return Color.gray;
+        }
+        else if(atom[0] == 'O')
+        {
+            return Color.red;
+        }
+        else if(atom[0] == 'N')
+        {
+            return Color.blue;
+        }
+        else if(atom[0] == 'S')
+        {
+            return Color.yellow;
+        }
+
+        return Color.black;
+    }
+
+    private static float CheckSizeOfElenemts(string atom, string residue)
+    {
+        if (atom == "N" || atom == "C")
+        {
+            return 1.5f;
+        } else if (atom == "CA")
+        {
+            return 2f;
+        } else if (atom == "O")
+        {
+            return 1.4f;
+        } else if (atom == "OXT")
+        {
+            return 1.5f;
+        }
+
+        if (residue == "ALA")
+        {
+            if (atom == "CB")
+            {
+                return 2f;
+            }
+        }
+        else if (residue == "CYS")
+        {
+            if (atom == "CB")
+            {
+                return 2f;
+            } else if (residue == "SG")
+            {
+                return 1.85f;
+            }
+        }
+        else if (residue == "ASP")
+        {
+            if (atom == "CB")
+            {
+                return 2f;
+            } else if (atom == "CG")
+            {
+                return 1.5f;
+            } else if (atom == "OD1" || atom == "OD2")
+            {
+                return 1.4f;
+            }
+        }
+        else if (residue == "GLU")
+        {
+            if (atom == "CB" || atom == "CG")
+            {
+                return 2f;
+            } else if (atom == "CD")
+            {
+                return 1.5f;
+            } else if (atom == "OE1" || atom == "OE2")
+            {
+                return 1.4f;
+            }
+        }
+        else if (residue == "PHE")
+        {
+            if (atom == "CB" || atom == "CG" || atom == "CD1" || atom == "CD2" || atom == "CE1" || atom == "CE2" || atom == "CZ")
+            {
+                return 1.85f;
+            }
+        }
+        else if (residue == "GLY")
+        {
+            if (atom == "OXT")
+            {
+                return 1.5f;
+            }
+        }
+        else if (residue == "HIS")
+        {
+            if (atom == "CB" || atom == "CG" || atom == "CD2" || atom == "CE1")
+            {
+                return 1.85f;
+            } else if (atom == "ND1" || atom == "NE2")
+            {
+                return 1.5f;
+            }
+        }
+        else if (residue == "ILE")
+        {
+            if (atom == "CB" || atom == "CG1" || atom == "CG2" || atom == "CD1")
+            {
+                return 2.0f;
+            }
+        }
+        else if (residue == "LYS")
+        {
+            if (atom == "CB" || atom == "CG" || atom == "CD" || atom == "CE")
+            {
+                return 2f;
+            } else if (atom == "NZ")
+            {
+                return 1.5f;
+            }
+        }
+        else if (residue == "LEU")
+        {
+            if (atom == "CB" || atom == "CG" || atom == "CD1" || atom == "CD2")
+            {
+                return 2f;
+            }
+        }
+        else if (residue == "MET")
+        {
+            if (atom == "CB" || atom == "CG" || atom == "CE")
+            {
+                return 2f;
+            }
+            else if (atom == "SD")
+            {
+                return 1.85f;
+            }
+        }
+        else if (residue == "MSE")
+        {
+            if (atom == "CB" || atom == "CG" || atom == "CE")
+            {
+                return 2f;
+            }
+            else if (atom == "SE")
+            {
+                return 1.85f;
+            }
+        }
+        else if (residue == "ASN")
+        {
+            if (atom == "CB" || atom == "CG")
+            {
+                return 2f;
+            } else if (atom == "OD1")
+            {
+                return 1.4f;
+            } else if (atom == "ND2")
+            {
+                return 1.5f;
+            }
+        }
+        else if (residue == "PRO")
+        {
+            if (atom == "CB" || atom == "CG" || atom == "CD")
+            {
+                return 1.85f;
+            }
+        }
+        else if(residue == "GLN")
+        {
+            if(atom == "CB" || atom == "CG")
+            {
+                return 2f;
+            }else if(atom == "CD" || atom == "NE2")
+            {
+                return 1.5f;
+            }else if (atom == "OE1")
+            {
+                return 1.4f;
+            }
+        }
+        else if(residue == "ARG")
+        {
+            if (atom == "CB" || atom == "CG" || atom == "CD" || atom == "CZ")
+            {
+                return 2f;
+            }
+            else if(atom == "NE" || atom == "NH1" || atom == "NH2")
+            {
+                return 1.5f;
+            }
+        }
+        else if(residue == "SER")
+        {
+            if(atom == "CB")
+            {
+                return 2f;
+            }else if (atom == "OG")
+            {
+                return 1.4f;
+            }
+        }
+        else if(residue == " THR")
+        {
+            if(atom == "CB")
+            {
+                return 2f;
+            }else if(atom == "OG1")
+            {
+                return 1.4f;
+            }else if(atom == "OG2")
+            {
+                return 1.5f;
+            }
+        }
+        else if(residue == "VAL")
+        {
+            if(atom == "CB" || atom == "CG1" || atom == "CG2")
+            {
+                return 2f;
+            }
+        }
+        else if (residue == "TRP")
+        {
+            if(atom == "CB")
+            {
+                return 2f;
+            }else if(atom == "NE1")
+            {
+                return 1.5f;
+            }else if(atom == "CG" || atom == "CD1" || atom == "CD2" || atom == "CE2" ||
+                atom == "CE3" || atom == "CZ2" || atom == "CZ3" || atom == "CH2")
+            {
+                return 1.85f;
+            }
+        }
+        else if(residue == "TRY")
+        {
+            if(atom == "CB")
+            {
+                return 2.0f;
+            }else if(atom == "OH")
+            {
+                return 1.4f;
+            }else if(atom == "CG" || atom == "CD1" || atom == "CD2" || atom == "CE1"
+                || atom == "CE3" || atom == "CZ")
+            {
+                return 1.85f;
+            }
+        }
+        else if(residue == "UKN")
+        {
+            if (atom == "OXT")
+            {
+                return 1.5f;
+            }
+        }
+
+        return 1.4f;
     }
 }
