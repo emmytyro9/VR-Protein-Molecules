@@ -21,7 +21,6 @@ public class MakeMol : MonoBehaviour
     private static float softness = 1f;
     private static GameObject atomModel;
     private static GameObject Molecule;
-    private static List<Vector3> vertice = new List<Vector3>();
 
     private static List<Color> vertexColor = new List<Color>(){
         new Color(1.00f, 1.00f, 1.00f, 1.00f),

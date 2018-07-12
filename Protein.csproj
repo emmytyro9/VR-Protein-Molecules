@@ -329,6 +329,7 @@
     <Compile Include="Assets\RORV\Scripts\NotificationCenter.cs" />
     <Compile Include="Assets\RORV\Scripts\SpacefillTimer.cs" />
     <Compile Include="Assets\RORV\Scripts\SurfaceTimer.cs" />
+    <Compile Include="Assets\Scripts\KeyboardController\ActivateSurface.cs" />
     <Compile Include="Assets\Scripts\KeyboardController\ErrorReporter.cs" />
     <Compile Include="Assets\Scripts\KeyboardController\KeyboardComponent.cs" />
     <Compile Include="Assets\Scripts\KeyboardController\KeyboardCreator.cs" />
@@ -341,6 +342,7 @@
     <Compile Include="Assets\Scripts\KeyboardController\MouseCam.cs" />
     <Compile Include="Assets\Scripts\KeyboardController\SceneChange.cs" />
     <Compile Include="Assets\Scripts\KeyboardController\SpaceMeshCreator.cs" />
+    <Compile Include="Assets\Scripts\KeyboardController\TestMol.cs" />
     <Compile Include="Assets\Scripts\KeyboardController\TestSpaceFill.cs" />
     <Compile Include="Assets\Scripts\KeyboardController\UvSlicer.cs" />
   </ItemGroup>

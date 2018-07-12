@@ -57,15 +57,15 @@ namespace CurvedVRKeyboard
 
                 Debug.Log(string.Format("Debug : Inside handleClick(KeyboardStatus) Output: " + GetOutput()));
                 sentOutput = GetOutput();
-                if(GetOutput() == "2itz-A" || GetOutput() == "1tup-EF" || GetOutput() == "1atn-A"|| GetOutput() == "a")
+                if (GetOutput() == "2itz-A" || GetOutput() == "1tup-EF" || GetOutput() == "1atn-A" || GetOutput() == "a")
                 {
                     Debug.Log(string.Format("Debug : Inside if condition(KeyboardStatus)"));
                     //SceneManager.LoadScene("ProteinMoleculeScene");
                     //SceneManager.LoadScene("Test");
-                    //SceneManager.LoadScene("NewRaycast");
                     SceneManager.LoadScene("NewRaycast");
+                    
                 }
-               
+
             }
             else if (value.Equals(BACK))
             {

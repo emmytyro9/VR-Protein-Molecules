@@ -1,15 +1,14 @@
 ﻿using UnityEngine;
-namespace CurvedVRKeyboard
-{
+namespace CurvedVRKeyboard {
 
     /// <summary>
     /// Setup class derived by all classes who are part of keyboard,
     /// so those variables are easy accessable everywhere
     /// </summary>
-    public abstract class KeyboardComponent : MonoBehaviour
-    {
+    public abstract class KeyboardComponent: MonoBehaviour {
+
         // Special signs. Feel free to change
-        public const string SPACE = "";
+        public const string SPACE = "  ";
         public const string BACK = "Back";
         public const string ABC = "ABC";
         public const string QEH = "123\n?!#";
@@ -20,8 +19,7 @@ namespace CurvedVRKeyboard
         public const int KEY_NUMBER = 30;
         public const int POSITION_SPACE = 28;
 
-        public enum KeyLetterEnum
-        {
+        public enum KeyLetterEnum {
             LowerCase, UpperCase, NonLetters
         }
 
@@ -66,20 +64,14 @@ namespace CurvedVRKeyboard
         /// <summary>
         /// Checks for errrors with array of keys. 
         /// </summary>
-        public static void CheckKeyArrays()
-        {
-            if (allLettersLowercase.Length != KEY_NUMBER)
-            {
+        public static void CheckKeyArrays () {
+            if(allLettersLowercase.Length != KEY_NUMBER) {
                 ErrorReporter.Instance.SetMessage("There is incorrect amount of letters in Lowercase array. Check KeyboardComponent class", ErrorReporter.Status.Error);
                 return;
-            }
-            else if (allLettersUppercase.Length != KEY_NUMBER)
-            {
+            } else if(allLettersUppercase.Length != KEY_NUMBER) {
                 ErrorReporter.Instance.SetMessage("There is incorrect amount of letters in Uppercase array. Check KeyboardComponent class", ErrorReporter.Status.Error);
                 return;
-            }
-            else if (allSpecials.Length != KEY_NUMBER)
-            {
+            } else if(allSpecials.Length != KEY_NUMBER) {
                 ErrorReporter.Instance.SetMessage("There is incorrect amount of letters in Special array. Check KeyboardComponent class", ErrorReporter.Status.Error);
                 return;
             }

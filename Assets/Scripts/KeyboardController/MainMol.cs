@@ -5,6 +5,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Net;
 using CurvedVRKeyboard;
+using System;
 
 public class MainMol : MonoBehaviour
 {
@@ -13,8 +14,8 @@ public class MainMol : MonoBehaviour
     private static Material molMat;
     private static float softness = 1f;
     private static GameObject Molecule;
-    private static List<Vector3> vertice = new List<Vector3>();
 
+    /*
     private static List<Color> vertexColor = new List<Color>(){
         new Color(1.00f, 1.00f, 1.00f, 1.00f),
         new Color(1.00f, 0.00f, 0.00f, 1.00f),
@@ -43,13 +44,21 @@ public class MainMol : MonoBehaviour
         new Color(1.00f, 1.00f, 0.00f, 1.00f),
         new Color(1.00f, 0.00f, 1.00f, 1.00f)
     };
+    */
 
     private static List<string> flaggedAminos = new List<string>() { "LEU", "ILE", "VAL", "MET", "PRO", "PHE", "TRP", "TYR", "ALA" };
     private static List<string> flaggedAtoms = new List<string>() { "N", "HN", "CA", "C", "O", "OT", "OH", "HH" };
-    private static string keepInput;
+
+
+    private static char GetChain()
+    {
+        return input[5];
+    }
 
     public static void SpawnMolecule(string type)
     {
+        Debug.Log(string.Format("Chain: " + GetChain()));  // Debugging if the system is able to get the correctly chain of molecule.
+
         GameObject mol = readEfvet(input, molScale, type);
         if (mol != null)
         {
@@ -62,21 +71,44 @@ public class MainMol : MonoBehaviour
         }
     }
 
+    public static string[] _getHETATM()
+    {
+        string[] HETATM = new string[] { };
+
+        try
+        {
+            string pdbFile = input.Substring(0, input.Length - 2);
+            string pathHetatm = "Assets/Resources/" + pdbFile + ".pdb";
+            StreamReader reader1 = new StreamReader(pathHetatm);
+            HETATM = reader1.ReadToEnd().Split('\n');
+            Debug.Log(string.Format("Successed`!!!`"));
+            reader1.Close();
+        }
+        catch(Exception e)
+        {
+            Debug.Log(string.Format("Exception Raised : " + e.ToString()));
+        }
+
+
+        return HETATM;
+    }
+
     public static string[] _getEfvet(string name)
     {
+
+
         string[] lines = new string[] { };
         try
         {
-
             string path = "Assets/Resources/" + input + ".txt";
             Debug.Log(string.Format("DEBUG Path: " + path));
             StreamReader reader = new StreamReader(path);
             lines = reader.ReadToEnd().Split('\n');
             reader.Close();
         }
-        catch (WebException e)
+        catch (Exception e)
         {
-            Debug.Log(string.Format("Exception Raised : " + e.Status.ToString()));
+            Debug.Log(string.Format("Exception Raised : " + e.ToString()));
         }
 
         return lines;
@@ -117,9 +149,9 @@ public class MainMol : MonoBehaviour
             int edgesCount = int.Parse(stArrayData[1]);
             int triangleArrayCount = int.Parse(stArrayData[2]);
 
-            if (verticesCount > 65000)
+            if (verticesCount > 50000)
             {
-                Debug.Log(string.Format("This molecule is too large(more than 65,000 vertices), we are going to destroy it!"));
+                Debug.Log(string.Format("This molecule is too large(more than 50,000 vertices), we are going to destroy it!"));
                 Destroy(Molecule);
                 Molecule = null;
                 return Molecule;
@@ -141,12 +173,11 @@ public class MainMol : MonoBehaviour
                 string residueName = stArrayData[15];
 
                 vertices.Add(new Vector3(-1 * x, y, z));
-                //Assign radius to each atom.
                 float atomSize = CheckSizeOfElenemts(atomName, residueName);
                 GameObject instantiateObj = null;
                 Renderer rend = null;
                 Color atomColor = GetColor(atomName);
-                //Debug.Log(string.Format("DEBUG: Atom size: ") + atomSize);
+
                 if (atomName != "OXT")
                 {
                     if (atomSize == 1.4f)
@@ -174,8 +205,6 @@ public class MainMol : MonoBehaviour
                         rend.material.color = atomColor;
                     }
 
-
-                    //Debug.Log(string.Format("DEBUG: Color = " + atomColor + " || Atom Name = " + atomName));
                     instantiateObj.transform.SetParent(Molecule.transform);
                     instantiateObj.isStatic = true;
                     insCollection.Add(instantiateObj);
@@ -205,29 +234,11 @@ public class MainMol : MonoBehaviour
             Mesh mesh = new Mesh();
             mesh.vertices = vertices.ToArray();
             mesh.triangles = triangles.ToArray();
-            //Debug.Log(string.Format("Triangle: " + mesh.triangles.Count()));
 
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
 
             Molecule.GetComponent<MeshFilter>().sharedMesh = mesh;
-
-            /***
-             * Conbine MeshFilter
-            MeshFilter[] meshFilters = Molecule.GetComponentsInChildren<MeshFilter>();
-            CombineInstance[] combine = new CombineInstance[meshFilters.Length];
-            int j = 0;
-            while (j < meshFilters.Length)
-            {
-                combine[j].mesh = meshFilters[j].sharedMesh;
-                combine[j].transform = meshFilters[j].transform.localToWorldMatrix;
-                meshFilters[j].gameObject.SetActive(false);
-                j++;
-            }
-            Molecule.transform.GetComponent<MeshFilter>().mesh = mesh;
-            Molecule.transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
-            Molecule.transform.gameObject.SetActive(true);
-            ***/
 
             Molecule.AddComponent<MeshCollider>();
             MeshCollider molCollider = Molecule.GetComponent<MeshCollider>();
@@ -245,15 +256,12 @@ public class MainMol : MonoBehaviour
             r.isKinematic = true;
             r.useGravity = false;
 
-            //Debug.Log(string.Format("Position in readvet(Spacefill): " + Molecule.transform.position.x + "," + Molecule.transform.position.y + ", " + Molecule.transform.position.z));
-
             return Molecule;
         }
 
         //***********************************************************************************
         else if(type == "surface")
         {
-
             GameObject mol = new GameObject(name);
             mol.transform.localScale = new Vector3(scale, scale, scale);
 
@@ -308,14 +316,27 @@ public class MainMol : MonoBehaviour
                 vertices.Add(new Vector3(-1 * x, y, z));
                 temperatures.Add(temperatureFactor);
 
+                /*
+                if(flaggedAtoms.Contains(atomName))
+                {
+                    colors.Add(GetColor(atomName));
+                }
+                */
+
+                colors.Add(GetColor(atomName));
+
+                /*
                 if (!flaggedAtoms.Contains(atomName) && flaggedAminos.Contains(residueName))
                 {
-                    colors.Add(vertexColor[colorIndex + 10]);
+                    // colors.Add(vertexColor[colorIndex + 10]);
+                    colors.Add(GetColor(atomName));
                 }
                 else
                 {
-                    colors.Add(vertexColor[colorIndex]);
+                    //colors.Add(vertexColor[colorIndex]);
+                    colors.Add(GetColor(atomName));
                 }
+                */
 
                 if (isInside != 1)
                 {
@@ -378,7 +399,81 @@ public class MainMol : MonoBehaviour
                 constrants[i].maxDistance = softness * temperatures[i] / maxTemparature;
             }
             mol.GetComponent<Cloth>().coefficients = constrants;
-            //Debug.Log(string.Format("Position in readvet(Surface): " + mol.transform.position.x + "," + mol.transform.position.y + ", " + mol.transform.position.z));
+            //Debug.Log(string.Format("DEBUG: Position (z , y , z) = (") + mol.transform.position.x + ", " + mol.transform.position.y + ", " + mol.transform.position.z + ")");
+
+            
+
+            ///**************************************************************
+            Regex sepReg1 = new Regex(@"\s+");
+            string[] h = _getHETATM();
+            print("Array Length " + h.Length);
+            GameObject HETATM = new GameObject("HETATM");
+           
+
+            for (int i = 0; i < h.Length; i++)
+            {
+                string line1 = h[i].TrimStart(' ');
+                string[] stArrayData1 = sepReg1.Split(line1);
+               
+
+                if (stArrayData1[0] == "HETATM")
+                {
+                    float Hx = float.Parse(stArrayData1[6]);
+                    float Hy = float.Parse(stArrayData1[7]);
+                    float Hz = float.Parse(stArrayData1[8]);
+                    char[] chain = stArrayData1[4].ToCharArray();
+
+                    Debug.Log(string.Format("Chain: " + chain[0])); // Debugging - To see the chain of protein molecule.
+
+                    if (chain[0] == GetChain())
+                    {
+                        print("This is: " + stArrayData1[0] + " of " + GetChain() + " chain.");
+
+                        string atom = stArrayData1[2];
+                        string residue = stArrayData1[3];
+
+                        float atomSize = CheckSizeOfElenemts(atom, residue);
+                        GameObject instantiateObj = null;
+                        Renderer rend = null;
+                        Color atomColor = GetColor(atom);
+                        //Debug.Log(string.Format("DEBUG: Atom size: ") + atomSize);
+                        if (atom != "OXT")
+                        {
+                            if (atomSize == 1.4f)
+                            {
+                                instantiateObj = Instantiate(atomModel_14, new Vector3(-1 * Hx, Hy, Hz), Quaternion.identity);
+                                rend = instantiateObj.GetComponent<Renderer>();
+                                rend.material.color = atomColor;
+                            }
+                            else if (atomSize == 1.5f)
+                            {
+                                instantiateObj = Instantiate(atomModel_14, new Vector3(-1 * Hx, Hy, Hz), Quaternion.identity);
+                                rend = instantiateObj.GetComponent<Renderer>();
+                                rend.material.color = atomColor;
+                            }
+                            else if (atomSize == 1.85f)
+                            {
+                                instantiateObj = Instantiate(atomModel_14, new Vector3(-1 * Hx, Hy, Hz), Quaternion.identity);
+                                rend = instantiateObj.GetComponent<Renderer>();
+                                rend.material.color = atomColor;
+                            }
+                            else if (atomSize == 2f)
+                            {
+                                instantiateObj = Instantiate(atomModel_14, new Vector3(-1 * Hx, Hy, Hz), Quaternion.identity);
+                                rend = instantiateObj.GetComponent<Renderer>();
+                                rend.material.color = atomColor;
+                            }
+
+                            instantiateObj.transform.SetParent(HETATM.transform);
+                        }
+                    }
+                }
+            }
+            ///**************************************************************
+            HETATM.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+            HETATM.transform.SetParent(mol.transform);
+            //HETATM.transform.position = GameObject.Find("OVRPlayerController").transform.position - new Vector3(0f, 0f, -3f);
+            //HETATM.transform.SetParent(mol.transform);
 
             return mol;
         }
@@ -387,7 +482,11 @@ public class MainMol : MonoBehaviour
 
     private static Color GetColor(string atom)
     {
-        if(atom[0] == 'C')
+        if (atom == "CA")
+        {
+            return Color.green;
+        }
+        else if(atom[0] == 'C')
         {
             return Color.gray;
         }
@@ -403,8 +502,11 @@ public class MainMol : MonoBehaviour
         {
             return Color.yellow;
         }
-
-        return Color.black;
+        else if(atom[0] == 'P')
+        {
+            return new Color(255f, 165f, 0f);
+        }
+            return Color.black;
     }
 
     private static float CheckSizeOfElenemts(string atom, string residue)

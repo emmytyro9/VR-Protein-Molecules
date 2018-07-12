@@ -33,8 +33,11 @@ namespace CurvedVRKeyboard {
             rayLength = Vector3.Distance(raycastingSource.position, target.transform.position) * (minRaylengthMultipler + 
                  (Mathf.Abs(target.transform.lossyScale.x) + Mathf.Abs(target.transform.lossyScale.y) + Mathf.Abs(target.transform.lossyScale.z)));
             RayCastKeyboard();
-        }
 
+            //Debug raycast
+            Debug.DrawRay(raycastingSource.transform.position, raycastingSource.TransformDirection(Vector3.forward * 1000), Color.green);
+        }
+         
         /// <summary>
         /// Check if camera is pointing at any key. 
         /// If it does changes state of key

@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace CurvedVRKeyboard
-{
-    public class KeyboardItem : KeyboardComponent
-    {
+namespace CurvedVRKeyboard {
+    public class KeyboardItem : KeyboardComponent {
         private Text letter;
+
         public static bool forceInit = true;
         private int position;
 
@@ -33,20 +32,16 @@ namespace CurvedVRKeyboard
 
 
 
-        public enum KeyMaterialEnum
-        {
+        public enum KeyMaterialEnum {
             Normal, Selected, Pressed
         }
 
-        public void Awake()
-        {
+        public void Awake() {
             Init();
         }
 
-        public void Init()
-        {
-            if (letter == null || quadFront == null)
-            {  // Check if initialized
+        public void Init() {
+            if(letter == null || quadFront == null) {  // Check if initialized
                 letter = gameObject.GetComponentInChildren<Text>();
                 quadFront = transform.Find(QUAD_FRONT).GetComponent<Renderer>();
             }
@@ -55,14 +50,11 @@ namespace CurvedVRKeyboard
         /// <summary>
         /// Handle for hover function
         /// </summary>
-        public void Hovering()
-        {
-            if (!clicked)
-            {// Is not already being clicked?
+        public void Hovering() {
+            if(!clicked) {// Is not already being clicked?
                 ChangeDisplayedMaterial(keySelectedMaterial);
             }
-            else
-            {
+            else {
                 HoldClick();
             }
         }
@@ -70,22 +62,18 @@ namespace CurvedVRKeyboard
         /// <summary>
         /// handle for click begining
         /// </summary>
-        public void Click()
-        {
+        public void Click() {
             clicked = true;
             ChangeDisplayedMaterial(keyPressedMaterial);
-            Debug.Log(string.Format("Debug: Inside Click(KeyboardItem)")); // Debugging
         }
 
         /// <summary>
         /// handle after click was started
         /// </summary>
-        private void HoldClick()
-        {
+        private void HoldClick() {
             ChangeDisplayedMaterial(keyPressedMaterial);
             clickHoldTimer += Time.deltaTime;
-            if (clickHoldTimer >= clickHoldTimeLimit)
-            {// Check if time of click is over
+            if(clickHoldTimer >= clickHoldTimeLimit) {// Check if time of click is over
                 clicked = false;
                 clickHoldTimer = 0f;
             }
@@ -94,8 +82,7 @@ namespace CurvedVRKeyboard
         /// <summary>
         /// Handle for hover over
         /// </summary>
-        public void StopHovering()
-        {
+        public void StopHovering() {
             ChangeDisplayedMaterial(keyNormalMaterial);
         }
 
@@ -103,20 +90,16 @@ namespace CurvedVRKeyboard
         /// Get value of key text
         /// </summary>
         /// <returns>value of key</returns>
-        public string GetValue()
-        {
-            Debug.Log(string.Format("Debug: GetValue(KeyboardItem) " + letter.text)); //Debugging
+        public string GetValue() {
             return letter.text;
         }
 
         /// <summary>
         /// Changes value of key text
         /// </summary>
-        public void SetKeyText(KeyLetterEnum letterType)
-        {
+        public void SetKeyText(KeyLetterEnum letterType) {
             string value = "";
-            switch (letterType)
-            {
+            switch(letterType) {
                 case KeyLetterEnum.LowerCase:
                     value = allLettersLowercase[Position];
                     break;
@@ -127,54 +110,51 @@ namespace CurvedVRKeyboard
                     value = allSpecials[Position];
                     break;
             }
-            if (!letter.text.Equals(value))
-            {
+            if(!letter.text.Equals(value)) {
                 letter.text = value;
-                Debug.Log(string.Format("Debug: SetKeyText(KeyboardItem)")); ///Debugging
             }
         }
 
+        /// <summary>
         /// Changes material on key
+        /// </summary>
         /// <param name="material">material to be displayed</param>
-        private void ChangeDisplayedMaterial(Material material)
-        {
+        private void ChangeDisplayedMaterial(Material material) {
             quadFront.sharedMaterial = material;
         }
 
+        /// <summary>
         /// Changes materials on all keys
+        /// </summary>
         /// <param name="keyNormalMaterial"></param>
         /// <param name="keySelectedMaterial"></param>
         /// <param name="keyPressedMaterial"></param>
-        public void SetMaterials(Material keyNormalMaterial, Material keySelectedMaterial, Material keyPressedMaterial)
-        {
+        public void SetMaterials(Material keyNormalMaterial, Material keySelectedMaterial, Material keyPressedMaterial) {
             this.keyNormalMaterial = keyNormalMaterial;
             this.keySelectedMaterial = keySelectedMaterial;
             this.keyPressedMaterial = keyPressedMaterial;
 
-            if (Position == POSITION_SPACE)
-            {
+            if(Position == POSITION_SPACE) {
                 SetMaterial(KeyMaterialEnum.Normal, keyNormalMaterial);
             }
 
-            if (IfSpaceWithSprite())
-            {
+            if(IfSpaceWithSprite()) {
                 AddSpriteToMaterial(spaceSprite);
             }
         }
 
-        private bool IfSpaceWithSprite()
-        {
+        private bool IfSpaceWithSprite() {
             return spaceSprite != null;
         }
 
+        /// <summary>
         /// Changes material for state
+        /// </summary>
         /// <param name="materialEnum">state of which material will be changed</param>
         /// <param name="newMaterial">new material</param>
-        public void SetMaterial(KeyMaterialEnum materialEnum, Material newMaterial)
-        {
+        public void SetMaterial(KeyMaterialEnum materialEnum, Material newMaterial) {
             Init();
-            switch (materialEnum)
-            {
+            switch(materialEnum) {
                 case KeyMaterialEnum.Normal:
                     keyNormalMaterial = IfSpaceWithSprite() ?
                         ChangeMaterialTexture(spaceSprite, newMaterial) : newMaterial;
@@ -192,16 +172,16 @@ namespace CurvedVRKeyboard
             }
         }
 
-
-
+        /// <summary>
+        /// Changes 'space' bar mesh
+        /// </summary>
         /// <param name="creator"></param>
-        public void ManipulateSpace(KeyboardCreator creator, Sprite spaceSprite)
-        {
+        public void ManipulateSpace(KeyboardCreator creator, Sprite spaceSprite) {
             this.spaceSprite = spaceSprite;
-            if (meshCreator == null)
+            if(meshCreator == null)
                 meshCreator = new SpaceMeshCreator(creator);
-            meshCreator.Recalculate9Slice(spaceSprite, creator.ReferencedPixels);
-
+            meshCreator.Recalculate9Slice(spaceSprite,creator.ReferencedPixels);
+            
             if (!creator.wasStaticOnStart)
             {
                 Init();
@@ -209,8 +189,7 @@ namespace CurvedVRKeyboard
             }
         }
 
-        private void AddSpriteToMaterial(Sprite spaceSprite)
-        {
+        private void AddSpriteToMaterial(Sprite spaceSprite) {
             keyNormalMaterial = ChangeMaterialTexture(spaceSprite, keyNormalMaterial);
             keySelectedMaterial = ChangeMaterialTexture(spaceSprite, keySelectedMaterial);
             keyPressedMaterial = ChangeMaterialTexture(spaceSprite, keyPressedMaterial);
@@ -220,10 +199,8 @@ namespace CurvedVRKeyboard
             SetMaterial(KeyMaterialEnum.Pressed, keyPressedMaterial);
         }
 
-        private Material ChangeMaterialTexture(Sprite spaceTexture, Material materialToChange)
-        {
-            if (materialToChange == null)
-            {
+        private Material ChangeMaterialTexture(Sprite spaceTexture, Material materialToChange) {
+            if(materialToChange == null) {
                 return materialToChange;
             }
 
@@ -233,28 +210,24 @@ namespace CurvedVRKeyboard
             return materialToChange;
         }
 
-        public string GetMeshName()
-        {
-            if (quadFront == null)
-            {
+        public string GetMeshName() {
+            if(quadFront == null) {
                 Init();
             }
 
             return quadFront.GetComponent<MeshFilter>().sharedMesh.name;
         }
 
-        public int Position
-        {
-            get
-            {
+        public int Position {
+            get {
                 return position;
             }
 
-            set
-            {
+            set {
                 position = value;
             }
         }
+
     }
 }
 
