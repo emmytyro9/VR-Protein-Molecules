@@ -23,17 +23,23 @@ namespace CurvedVRKeyboard {
             LowerCase, UpperCase, NonLetters
         }
 
-
-
         // Feel free to change (but do not write strings in place of
         // special signs, change variables values instead).
         // Remember to always have 30 values
         public static readonly string[] allLettersLowercase = new string[]
         {
+        
+             "1","2","3","4","5","6","7","8","9","0",
+        "@","#","£","_","&","-","+","(",")",
+        "*","\"","'",":",";","/","!","?",
+        ABC,SPACE,BACK
+      
+            /*
         "q","w","e","r","t","y","u","i","o","p",
         "a","s","d","f","g","h","j","k","l",
         UP,"z","x","c","v","b","n","m",
         QEH,SPACE,BACK
+        */
         };
 
         // Feel free to change (but do not write strings in place of
@@ -52,10 +58,16 @@ namespace CurvedVRKeyboard {
         // Remember to always have 30 values
         public static readonly string[] allSpecials = new string[]
         {
+            "q","w","e","r","t","y","u","i","o","p",
+        "a","s","d","f","g","h","j","k","l",
+        UP,"z","x","c","v","b","n","m",
+        QEH,SPACE,BACK
+            /*
         "1","2","3","4","5","6","7","8","9","0",
         "@","#","£","_","&","-","+","(",")",
         "*","\"","'",":",";","/","!","?",
         ABC,SPACE,BACK
+            */
         };
 
         // Number of items in a row

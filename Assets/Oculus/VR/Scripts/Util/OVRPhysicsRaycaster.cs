@@ -24,12 +24,14 @@ using System.Collections.Generic;
 
 namespace UnityEngine.EventSystems
 {
+
     /// <summary>
     /// Simple event system using physics raycasts. Very closely based on UnityEngine.EventSystems.PhysicsRaycaster
     /// </summary>
     [RequireComponent(typeof(OVRCameraRig))]
     public class OVRPhysicsRaycaster : BaseRaycaster
     {
+           public static string name; 
         /// <summary>
         /// Const to use for clarity when no event mask is set
         /// </summary>

@@ -15,7 +15,7 @@ using CurvedVRKeyboard;
 
 public class MakeMol : MonoBehaviour
 {
-    private static string input = KeyboardStatus.sentOutput;
+    private static string input = "1atn-A";
     private static float molScale = 0.01f;
     private static Material molMat;
     private static float softness = 1f;

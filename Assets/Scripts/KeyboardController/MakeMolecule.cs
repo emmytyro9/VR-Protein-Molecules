@@ -9,7 +9,7 @@ using CurvedVRKeyboard;
 
 public class MakeMolecule : MonoBehaviour
 {
-    private string input = KeyboardStatus.sentOutput;
+    private string input = "1atn-A";
     public float molScale;
     public Material molMat;
     public float softness;

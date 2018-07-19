@@ -325,11 +325,13 @@
     <Compile Include="Assets\OVRInspector\Scripts\UIUtils\OVRGazeEventTrigger.cs" />
     <Compile Include="Assets\OVRInspector\Scripts\UIUtils\OVRGazeScroller.cs" />
     <Compile Include="Assets\RORV\Scripts\ButtonTimer.cs" />
+    <Compile Include="Assets\RORV\Scripts\ChainSelectingTimer.cs" />
     <Compile Include="Assets\RORV\Scripts\FillCursor.cs" />
     <Compile Include="Assets\RORV\Scripts\NotificationCenter.cs" />
     <Compile Include="Assets\RORV\Scripts\SpacefillTimer.cs" />
     <Compile Include="Assets\RORV\Scripts\SurfaceTimer.cs" />
-    <Compile Include="Assets\Scripts\KeyboardController\ActivateSurface.cs" />
+    <Compile Include="Assets\Scripts\KeyboardController\AwakeToSpawnMolecule.cs" />
+    <Compile Include="Assets\Scripts\KeyboardController\BackTimer.cs" />
     <Compile Include="Assets\Scripts\KeyboardController\ErrorReporter.cs" />
     <Compile Include="Assets\Scripts\KeyboardController\KeyboardComponent.cs" />
     <Compile Include="Assets\Scripts\KeyboardController\KeyboardCreator.cs" />
@@ -340,9 +342,9 @@
     <Compile Include="Assets\Scripts\KeyboardController\MakeMol.cs" />
     <Compile Include="Assets\Scripts\KeyboardController\MakeMolecule.cs" />
     <Compile Include="Assets\Scripts\KeyboardController\MouseCam.cs" />
+    <Compile Include="Assets\Scripts\KeyboardController\ReadMoleculeData.cs" />
     <Compile Include="Assets\Scripts\KeyboardController\SceneChange.cs" />
     <Compile Include="Assets\Scripts\KeyboardController\SpaceMeshCreator.cs" />
-    <Compile Include="Assets\Scripts\KeyboardController\TestMol.cs" />
     <Compile Include="Assets\Scripts\KeyboardController\TestSpaceFill.cs" />
     <Compile Include="Assets\Scripts\KeyboardController\UvSlicer.cs" />
   </ItemGroup>
@@ -379,9 +381,7 @@
     <None Include="Assets\Oculus\VR\Shaders\OVRColorRampAlpha.shader" />
     <None Include="Assets\Oculus\VR\Shaders\Unlit Crosshair.shader" />
     <None Include="Assets\Resources\1atn-A.txt" />
-    <None Include="Assets\Resources\1tup-EF.txt" />
     <None Include="Assets\Resources\2itz-A.txt" />
-    <None Include="Assets\Resources\a.txt" />
     <None Include="Assets\SkySerie Freebie\Hdri setup.txt" />
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
     <None Include="Assets\Standard Assets\Environment\Water (Basic)\Shaders\FXWaterBasic.shader" />

@@ -3,52 +3,24 @@ using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Net;
 using CurvedVRKeyboard;
 using System;
 
 public class MainMol : MonoBehaviour
 {
-    private static string input = KeyboardStatus.sentOutput;
+
+    //Change the keyboard Scene => number comes first.
+    //UP button is not needed. - All characters must be lowerCase.
+
+
+    private static string input = ChainSelectingTimer.molecule_name;
     private static float molScale = 0.01f;
     private static Material molMat;
     private static float softness = 1f;
     private static GameObject Molecule;
 
-    /*
-    private static List<Color> vertexColor = new List<Color>(){
-        new Color(1.00f, 1.00f, 1.00f, 1.00f),
-        new Color(1.00f, 0.00f, 0.00f, 1.00f),
-        new Color(1.00f, 0.25f, 0.25f, 1.00f),
-        new Color(1.00f, 0.50f, 0.50f, 1.00f),
-        new Color(1.00f, 0.75f, 0.75f, 1.00f),
-        new Color(1.00f, 1.00f, 1.00f, 1.00f),
-        new Color(0.80f, 0.80f, 1.00f, 1.00f),
-        new Color(0.60f, 0.60f, 1.00f, 1.00f),
-        new Color(0.40f, 0.40f, 1.00f, 1.00f),
-        new Color(0.00f, 0.00f, 1.00f, 1.00f),
-        new Color(1.00f, 1.00f, 1.00f, 1.00f),
-        new Color(1.00f, 0.500f, 0.000f, 1.00f),
-        new Color(1.00f, 0.625f, 0.125f, 1.00f),
-        new Color(1.00f, 0.750f, 0.250f, 1.00f),
-        new Color(1.00f, 0.875f, 0.375f, 1.00f),
-        new Color(1.00f, 1.000f, 0.375f, 1.00f),
-        new Color(0.80f, 1.00f, 0.60f, 1.00f),
-        new Color(0.60f, 1.00f, 0.50f, 1.00f),
-        new Color(0.40f, 1.00f, 0.40f, 1.00f),
-        new Color(0.00f, 1.00f, 0.00f, 1.00f),
-        new Color(1.00f, 1.00f, 1.00f, 1.00f),
-        new Color(1.00f, 0.00f, 0.00f, 1.00f),
-        new Color(0.00f, 0.00f, 1.00f, 1.00f),
-        new Color(0.00f, 1.00f, 0.00f, 1.00f),
-        new Color(1.00f, 1.00f, 0.00f, 1.00f),
-        new Color(1.00f, 0.00f, 1.00f, 1.00f)
-    };
-    */
-
     private static List<string> flaggedAminos = new List<string>() { "LEU", "ILE", "VAL", "MET", "PRO", "PHE", "TRP", "TYR", "ALA" };
     private static List<string> flaggedAtoms = new List<string>() { "N", "HN", "CA", "C", "O", "OT", "OH", "HH" };
-
 
     private static char GetChain()
     {
@@ -59,7 +31,7 @@ public class MainMol : MonoBehaviour
     {
         Debug.Log(string.Format("Chain: " + GetChain()));  // Debugging if the system is able to get the correctly chain of molecule.
 
-        GameObject mol = readEfvet(input, molScale, type);
+        GameObject mol = readEfvet(input.ToLower(), molScale, type);
         if (mol != null)
         {
             type = "";
@@ -71,17 +43,17 @@ public class MainMol : MonoBehaviour
         }
     }
 
-    public static string[] _getHETATM()
+    public static string[] _getMoleculeData()
     {
-        string[] HETATM = new string[] { };
+        string[] data = new string[] { };
 
         try
         {
             string pdbFile = input.Substring(0, input.Length - 2);
             string pathHetatm = "Assets/Resources/" + pdbFile + ".pdb";
             StreamReader reader1 = new StreamReader(pathHetatm);
-            HETATM = reader1.ReadToEnd().Split('\n');
-            Debug.Log(string.Format("Successed`!!!`"));
+            data = reader1.ReadToEnd().Split('\n');
+            Debug.Log(string.Format("DEBUG: PDB file are read Successfully!!!"));
             reader1.Close();
         }
         catch(Exception e)
@@ -90,13 +62,11 @@ public class MainMol : MonoBehaviour
         }
 
 
-        return HETATM;
+        return data;
     }
 
     public static string[] _getEfvet(string name)
     {
-
-
         string[] lines = new string[] { };
         try
         {
@@ -242,7 +212,7 @@ public class MainMol : MonoBehaviour
 
             Molecule.AddComponent<MeshCollider>();
             MeshCollider molCollider = Molecule.GetComponent<MeshCollider>();
-            molCollider.convex = true;
+            //molCollider.convex = true;
             molCollider.inflateMesh = true;
             Molecule.GetComponent<MeshCollider>().sharedMesh = mesh;
 
@@ -316,27 +286,7 @@ public class MainMol : MonoBehaviour
                 vertices.Add(new Vector3(-1 * x, y, z));
                 temperatures.Add(temperatureFactor);
 
-                /*
-                if(flaggedAtoms.Contains(atomName))
-                {
-                    colors.Add(GetColor(atomName));
-                }
-                */
-
                 colors.Add(GetColor(atomName));
-
-                /*
-                if (!flaggedAtoms.Contains(atomName) && flaggedAminos.Contains(residueName))
-                {
-                    // colors.Add(vertexColor[colorIndex + 10]);
-                    colors.Add(GetColor(atomName));
-                }
-                else
-                {
-                    //colors.Add(vertexColor[colorIndex]);
-                    colors.Add(GetColor(atomName));
-                }
-                */
 
                 if (isInside != 1)
                 {
@@ -404,11 +354,12 @@ public class MainMol : MonoBehaviour
             
 
             ///**************************************************************
+            ///To Generate the HETATM (Small Molecule) in surface molecule.
+            
             Regex sepReg1 = new Regex(@"\s+");
-            string[] h = _getHETATM();
+            string[] h = _getMoleculeData();
             print("Array Length " + h.Length);
             GameObject HETATM = new GameObject("HETATM");
-           
 
             for (int i = 0; i < h.Length; i++)
             {
@@ -423,11 +374,11 @@ public class MainMol : MonoBehaviour
                     float Hz = float.Parse(stArrayData1[8]);
                     char[] chain = stArrayData1[4].ToCharArray();
 
-                    Debug.Log(string.Format("Chain: " + chain[0])); // Debugging - To see the chain of protein molecule.
+                    //Debug.Log(string.Format("Chain: " + chain[0])); // Debugging - To see the chain of protein molecule.
 
                     if (chain[0] == GetChain())
                     {
-                        print("This is: " + stArrayData1[0] + " of " + GetChain() + " chain.");
+                        //print("This is: " + stArrayData1[0] + " of " + GetChain() + " chain.");
 
                         string atom = stArrayData1[2];
                         string residue = stArrayData1[3];
@@ -436,7 +387,7 @@ public class MainMol : MonoBehaviour
                         GameObject instantiateObj = null;
                         Renderer rend = null;
                         Color atomColor = GetColor(atom);
-                        //Debug.Log(string.Format("DEBUG: Atom size: ") + atomSize);
+                        //Debug.Log(string.Format("DEBUG: HETATM  Atom size: ") + atomSize);
                         if (atom != "OXT")
                         {
                             if (atomSize == 1.4f)
@@ -469,24 +420,54 @@ public class MainMol : MonoBehaviour
                     }
                 }
             }
-            ///**************************************************************
-            HETATM.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+
+            HETATM.transform.localScale = new Vector3(.01f, .01f, .01f);
             HETATM.transform.SetParent(mol.transform);
-            //HETATM.transform.position = GameObject.Find("OVRPlayerController").transform.position - new Vector3(0f, 0f, -3f);
-            //HETATM.transform.SetParent(mol.transform);
+            ///End of generating HETATM (Small Molecule) in surface molecule.
+            ///**************************************************************
+
+
+            string[] data = GetAllChain();
+            print("DEBUG == There are: " + data.Length +  " chain of this molecule.");
+            for (int i = 0; i < data.Length; i++)
+            {
+                print("DEBUG == Consist of: " + data[i]);
+            }
+            
 
             return mol;
         }
      return null;
     }
 
+    private static string[] GetAllChain()
+    {
+        Regex sepReg2 = new Regex(@"\s+");
+        string[] atom_data = _getMoleculeData();
+        var allChain = new List<string>();
+
+        for (int i = 0; i < atom_data.Length; i++)
+         {
+            string line1 = atom_data[i].TrimStart(' ');
+            string[] data = sepReg2.Split(line1);
+
+            if(data[0] == "ATOM" || data[0] == "HETATM")
+            {
+                if(!allChain.Contains(data[4]))
+                {
+                    allChain.Add(data[4]);
+                }
+            }
+
+         }
+
+        return allChain.ToArray();
+     }
+
     private static Color GetColor(string atom)
     {
-        if (atom == "CA")
-        {
-            return Color.green;
-        }
-        else if(atom[0] == 'C')
+
+        if (atom[0] == 'C')
         {
             return Color.gray;
         }

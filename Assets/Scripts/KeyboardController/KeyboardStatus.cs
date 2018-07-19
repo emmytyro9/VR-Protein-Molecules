@@ -57,14 +57,15 @@ namespace CurvedVRKeyboard
 
                 Debug.Log(string.Format("Debug : Inside handleClick(KeyboardStatus) Output: " + GetOutput()));
                 sentOutput = GetOutput();
-                if (GetOutput() == "2itz-A" || GetOutput() == "1tup-EF" || GetOutput() == "1atn-A" || GetOutput() == "a")
-                {
+              //  if (GetOutput() == "2itz" || GetOutput() == "1tup" || GetOutput() == "1atn")
+              //  {
                     Debug.Log(string.Format("Debug : Inside if condition(KeyboardStatus)"));
                     //SceneManager.LoadScene("ProteinMoleculeScene");
                     //SceneManager.LoadScene("Test");
-                    SceneManager.LoadScene("NewRaycast");
+                    //SceneManager.LoadScene("NewRaycast");
+                    SceneManager.LoadScene("ChainChoosingScene");
                     
-                }
+               // }
 
             }
             else if (value.Equals(BACK))
@@ -79,6 +80,7 @@ namespace CurvedVRKeyboard
 
         private void ChangeSpecialLetters()
         {
+            Debug.Log(string.Format("Debug : Inside ChangeSpecialLetters(KeyboardStatus)"));
             KeyLetterEnum ToDisplay = areLettersActive ? KeyLetterEnum.NonLetters : KeyLetterEnum.LowerCase;
             areLettersActive = !areLettersActive;
             isLowercase = true;
@@ -90,6 +92,7 @@ namespace CurvedVRKeyboard
 
         private void LowerUpperKeys()
         {
+            Debug.Log(string.Format("Debug : Inside LowerUpperKeys(KeyboardStatus)"));
             KeyLetterEnum ToDisplay = isLowercase ? KeyLetterEnum.UpperCase : KeyLetterEnum.LowerCase;
             isLowercase = !isLowercase;
             for (int i = 0; i < keys.Length; i++)
@@ -100,6 +103,7 @@ namespace CurvedVRKeyboard
 
         private void BackspaceKey()
         {
+            Debug.Log(string.Format("Debug : Inside BackspaceKey(KeyboardStatus)"));
             if (output.Length >= 1)
             {
                 textComponent = targetGameObject.GetComponent(typeHolder.GetType());

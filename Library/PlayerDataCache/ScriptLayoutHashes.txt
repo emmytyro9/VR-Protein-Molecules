@@ -135,6 +135,7 @@ e9bdabf9265d758d56f01bb188916fa8 UnityEngine.Networking.dll:UnityEngine.Networki
 eb3da15c32b68d9f52c60dbb287d76b1 Assembly-CSharp.dll:.ONSPAudioSource
 e7de64a2f47c8a0046023c2b0a8f83bb Assembly-CSharp.dll:.OvrAvatarSettings
 477e57972c7cb9ddea417152523c8518 Assembly-CSharp.dll:.AudioManager
+2ca4c679b171394939c504086e8294d6 Assembly-CSharp.dll:.ReadMoleculeData
 6e714b24188cddfc9ae1e07d05ed4ddd Assembly-CSharp-firstpass.dll:UnityStandardAssets.Utility.ParticleSystemDestroyer
 879b3df2ab67cfd00172f75f85a7a583 Assembly-CSharp-firstpass.dll:UnityStandardAssets.Utility.SimpleMouseRotator
 bc68edb0af574bf79f9550ead8ebae5c UnityEngine.HoloLens.dll:UnityEngine.Audio.AudioSpatializerMicrosoft
@@ -175,7 +176,6 @@ a90e94673f50d2237c1b971c138660c6 Assembly-CSharp-firstpass.dll:UnityStandardAsse
 091eada8f1791c5dbb2277f0c73ec1ad Assembly-CSharp.dll:.MakeMolecule
 cfa93710d56cd4da2a3b2eec27bc1139 Assembly-CSharp-firstpass.dll:UnityStandardAssets.Water.PlanarReflection
 8535dae6224e7a25c4aaa54ab9b4f894 Assembly-CSharp.dll:.OVRScreenFade
-05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.TestMol
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp-firstpass.dll:UnityStandardAssets.Water.Displace
 c0c07fd3ae2440e647d00d1c1b33b5cc Assembly-CSharp.dll:.OVRLipSyncContextBase
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.OVRLipSync
@@ -244,6 +244,7 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.VR.WSA.Spa
 9eba78f1cd10b0dbf5c6f6f87dec25d5 Assembly-CSharp.dll:.SurfaceTimer
 1a5e432b09bf154dd33c7153b667a205 Assembly-CSharp.dll:UnityEngine.EventSystems.OVRPhysicsRaycaster
 7e926316ce20e4d45cb9a9aebc6e79e9 Assembly-CSharp.dll:.OVRGridCube
+9eba78f1cd10b0dbf5c6f6f87dec25d5 Assembly-CSharp.dll:.ChainSelectingTimer
 db3b233e35a88802fed1717d19c3d9ec Assembly-CSharp-firstpass.dll:UnityStandardAssets.Utility.FollowTarget
 069dbb2201dc5bbfc5610a4e530f0cd0 Assembly-CSharp.dll:.OvrAvatarSkinnedMeshRenderComponent
 0c0161a430019cdce8a92f4470308c92 Assembly-CSharp.dll:.ParticleGazeCursor
@@ -274,3 +275,4 @@ bf7482d4e5c04288a05506aa4a39c005 Assembly-CSharp.dll:.OVRSliderLabelUpdater
 01a983730f96c20cc91823391ed40c4e Assembly-CSharp.dll:.OVRLipSyncContextTextureFlip
 efaacbc067f54d801b8ecfdac3af7084 Assembly-CSharp.dll:.OVRVoiceModContext
 0f3d4bb7128a287827d041c696039525 Assembly-CSharp-firstpass.dll:UnityStandardAssets.Utility.AutoMobileShaderSwitch
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.AwakeToSpawnMolecule

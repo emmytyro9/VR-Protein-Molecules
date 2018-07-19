@@ -35,7 +35,7 @@ using UnityEngine.UI;
             NotificationCenter.DefaultCenter().PostNotification(this, "EnNada");
             Debug.Log(string.Format("Debug: Cancel."));
             CancelInvoke("countDown");
-            timeremain = 3;
+            timeremain = 2;
             isClick = false;
         }
 
@@ -46,7 +46,7 @@ using UnityEngine.UI;
                 NotificationCenter.DefaultCenter().PostNotification(this, "EnNada");
                 _button.onClick.Invoke();
                 CancelInvoke("countDown");
-                timeremain = 3;
+                timeremain = 2;
 
             }
 
