@@ -55,7 +55,7 @@ namespace CurvedVRKeyboard {
 
         // Feel free to change (but do not write strings in place of
         // special signs, change variables values instead)
-        // Remember to always have 30 values
+        // Remember to always have 30 values.
         public static readonly string[] allSpecials = new string[]
         {
             "q","w","e","r","t","y","u","i","o","p",

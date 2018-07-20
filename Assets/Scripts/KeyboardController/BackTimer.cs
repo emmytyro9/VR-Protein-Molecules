@@ -49,7 +49,6 @@ public class BackTimer : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void Clicked()
     {
-        Debug.Log(string.Format("Surface is clicked."));
         Debug.Log(string.Format("Debug: Back button was Clicked."));
         SceneManager.LoadScene("KeyboardScene");
 

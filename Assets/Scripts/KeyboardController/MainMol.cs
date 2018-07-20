@@ -71,7 +71,7 @@ public class MainMol : MonoBehaviour
         try
         {
             string path = "Assets/Resources/" + input + ".txt";
-            Debug.Log(string.Format("DEBUG Path: " + path));
+            Debug.Log(string.Format("DEBUG: the file " + input + " is read successfully"));
             StreamReader reader = new StreamReader(path);
             lines = reader.ReadToEnd().Split('\n');
             reader.Close();
@@ -96,8 +96,7 @@ public class MainMol : MonoBehaviour
 
         if (type == "spacefill")
         {
-            Molecule = new GameObject();
-            Molecule.name = "Spacefill Molecule";
+            Molecule = new GameObject("Spacefill: " + input);
             Molecule.AddComponent<MeshFilter>();
 
             Regex sepReg = new Regex(@"\s+");
