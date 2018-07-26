@@ -11,6 +11,7 @@ TagManager:
   - dontmove
   - listlast
   - Surface
+  - HETATM
   layers:
   - Default
   - TransparentFX

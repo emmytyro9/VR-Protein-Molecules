@@ -60,6 +60,7 @@ using UnityEngine.UI;
             isClick = true;
             Debug.Log(string.Format("Debug: Clicked."));
             Destroy(GameObject.FindGameObjectWithTag("Mol"));
+            Destroy(GameObject.FindGameObjectWithTag("HETATM"));
             MainMol.SpawnMolecule("surface");
            
         }

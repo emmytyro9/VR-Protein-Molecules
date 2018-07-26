@@ -9,14 +9,16 @@ using System;
 public class MainMol : MonoBehaviour
 {
 
-    //Change the keyboard Scene => number comes first.
-    //UP button is not needed. - All characters must be lowerCase.
+    //user should be able to grab small molecules.
+    //Bigger molecule.
+    //test other molecules.
+
 
 
     private static string input = ChainSelectingTimer.molecule_name;
-    private static float molScale = 0.01f;
+    private static float molScale = 0.015f;
     private static Material molMat;
-    private static float softness = 1f;
+    private static float softness = 0f;
     private static GameObject Molecule;
 
     private static List<string> flaggedAminos = new List<string>() { "LEU", "ILE", "VAL", "MET", "PRO", "PHE", "TRP", "TYR", "ALA" };
@@ -36,7 +38,7 @@ public class MainMol : MonoBehaviour
         {
             type = "";
             mol.transform.tag = "Mol";
-            mol.GetComponent<Transform>().transform.position = GameObject.Find("OVRPlayerController").transform.position - new Vector3(0f, 0f, -3f);
+            mol.GetComponent<Transform>().transform.position = GameObject.Find("OVRPlayerController").transform.position - new Vector3(0f, 1f, -3f);
             Debug.Log(string.Format("Mol x,y,z: ") + GameObject.FindGameObjectWithTag("Mol").transform.position.x + ", " + GameObject.FindGameObjectWithTag("Mol").transform.position.y + ", " + GameObject.FindGameObjectWithTag("Mol").transform.position.z);
             Debug.Log(string.Format("OVRPlayerController x,y,z: ") + GameObject.Find("OVRPlayerController").transform.position.x + ", " + GameObject.Find("OVRPlayerController").transform.position.y + ", " + GameObject.Find("OVRPlayerController").transform.position.z);
 
@@ -80,7 +82,7 @@ public class MainMol : MonoBehaviour
         {
             Debug.Log(string.Format("Exception Raised : " + e.ToString()));
         }
-
+         
         return lines;
     }
 
@@ -98,6 +100,8 @@ public class MainMol : MonoBehaviour
         {
             Molecule = new GameObject("Spacefill: " + input);
             Molecule.AddComponent<MeshFilter>();
+          
+
 
             Regex sepReg = new Regex(@"\s+");
             //		Regex numReg = new Regex(@"[^0-9]");
@@ -173,14 +177,14 @@ public class MainMol : MonoBehaviour
                         rend = instantiateObj.GetComponent<Renderer>();
                         rend.material.color = atomColor;
                     }
-
+                    //modify here - grabbable atom.
                     instantiateObj.transform.SetParent(Molecule.transform);
                     instantiateObj.isStatic = true;
                     insCollection.Add(instantiateObj);
                 }
             }
 
-            Molecule.transform.localScale = new Vector3(.01f, .01f, .01f);
+            Molecule.transform.localScale = new Vector3(.015f, .015f, .015f);
             StaticBatchingUtility.Combine(insCollection.ToArray(), Molecule);
 
             var triangles = new List<int>();
@@ -211,7 +215,6 @@ public class MainMol : MonoBehaviour
 
             Molecule.AddComponent<MeshCollider>();
             MeshCollider molCollider = Molecule.GetComponent<MeshCollider>();
-            //molCollider.convex = true;
             molCollider.inflateMesh = true;
             Molecule.GetComponent<MeshCollider>().sharedMesh = mesh;
 
@@ -231,8 +234,13 @@ public class MainMol : MonoBehaviour
         //***********************************************************************************
         else if(type == "surface")
         {
+
+            GameObject surface = new GameObject("Surface: " + input);
+            
+
             GameObject mol = new GameObject(name);
             mol.transform.localScale = new Vector3(scale, scale, scale);
+            mol.transform.SetParent(surface.transform);
 
             mol.AddComponent<MeshFilter>();
             mol.AddComponent<SkinnedMeshRenderer>();
@@ -359,6 +367,7 @@ public class MainMol : MonoBehaviour
             string[] h = _getMoleculeData();
             print("Array Length " + h.Length);
             GameObject HETATM = new GameObject("HETATM");
+            HETATM.transform.tag = "Surface";
 
             for (int i = 0; i < h.Length; i++)
             {
@@ -397,19 +406,19 @@ public class MainMol : MonoBehaviour
                             }
                             else if (atomSize == 1.5f)
                             {
-                                instantiateObj = Instantiate(atomModel_14, new Vector3(-1 * Hx, Hy, Hz), Quaternion.identity);
+                                instantiateObj = Instantiate(atomModel_15, new Vector3(-1 * Hx, Hy, Hz), Quaternion.identity);
                                 rend = instantiateObj.GetComponent<Renderer>();
                                 rend.material.color = atomColor;
                             }
                             else if (atomSize == 1.85f)
                             {
-                                instantiateObj = Instantiate(atomModel_14, new Vector3(-1 * Hx, Hy, Hz), Quaternion.identity);
+                                instantiateObj = Instantiate(atomModel_185, new Vector3(-1 * Hx, Hy, Hz), Quaternion.identity);
                                 rend = instantiateObj.GetComponent<Renderer>();
                                 rend.material.color = atomColor;
                             }
                             else if (atomSize == 2f)
                             {
-                                instantiateObj = Instantiate(atomModel_14, new Vector3(-1 * Hx, Hy, Hz), Quaternion.identity);
+                                instantiateObj = Instantiate(atomModel_2, new Vector3(-1 * Hx, Hy, Hz), Quaternion.identity);
                                 rend = instantiateObj.GetComponent<Renderer>();
                                 rend.material.color = atomColor;
                             }
@@ -420,8 +429,34 @@ public class MainMol : MonoBehaviour
                 }
             }
 
-            HETATM.transform.localScale = new Vector3(.01f, .01f, .01f);
-            HETATM.transform.SetParent(mol.transform);
+            
+
+            HETATM.GetComponent<Transform>().transform.position = GameObject.Find("OVRPlayerController").transform.position - new Vector3(0f, 1f, -3f);
+
+            HETATM.transform.localScale = new Vector3(.015f, .015f, .015f);
+            HETATM.transform.SetParent(surface.transform);
+
+            HETATM.AddComponent<MeshFilter>();
+            HETATM.GetComponent<MeshFilter>().sharedMesh = mesh;
+
+
+            HETATM.AddComponent<MeshCollider>();
+            MeshCollider HETATMCollider = HETATM.GetComponent<MeshCollider>();
+            HETATMCollider.inflateMesh = true;
+            HETATM.GetComponent<MeshCollider>().sharedMesh = mesh;
+
+            HETATM.AddComponent<OVRGrabbable>();
+            OVRGrabbable hetatm = HETATM.GetComponent<OVRGrabbable>();
+            Collider collider = HETATM.GetComponent<MeshCollider>();
+            hetatm.GetComponent<OVRGrabbable>().setGrabPoint(collider);
+
+            HETATM.AddComponent<Rigidbody>();
+            Rigidbody rigid = HETATM.GetComponent<Rigidbody>();
+            rigid.isKinematic = true;
+            rigid.useGravity = false;
+
+            
+            
             ///End of generating HETATM (Small Molecule) in surface molecule.
             ///**************************************************************
 
